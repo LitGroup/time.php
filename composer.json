@@ -1,0 +1,46 @@
+{
+    "name": "litgroup/time",
+    "description": "DateTime library for PHP 7+",
+    "keywords": ["datetime", "date", "time"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman Shamritskiy",
+            "email": "roman@litgroup.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LitGroup\\Time\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\LitGroup\\Time\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.0",
+        "litgroup/equatable": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+    "config": {
+        "bin-dir": "tool"
+    },
+    "archive": {
+        "exclude": [
+            "/phpunit.xml.dist",
+            "/.travis.yml",
+            ".gitignore"
+        ]
+    },
+    "scripts": {
+        "test": [
+            "tool/phpspec run --no-interaction --config=phpspec.yml.dist",
+            "tool/phpunit"
+        ]
+    }
+}
