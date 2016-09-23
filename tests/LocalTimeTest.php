@@ -14,9 +14,10 @@ namespace Test\LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
+use LitGroup\Time\LocalTime;
 use LitGroup\Time\Time;
 
-class TimeTest extends \PHPUnit_Framework_TestCase
+class LocalTimeTest extends \PHPUnit_Framework_TestCase
 {
     const HOUR = 5;
     const MINUTE = 6;
@@ -28,6 +29,14 @@ class TimeTest extends \PHPUnit_Framework_TestCase
     const MAX_MINUTE = 59;
     const MIN_SECOND = 0;
     const MAX_SECOND = 59;
+
+    /**
+     * @test
+     */
+    public function itImplementsTimeInterface()
+    {
+        $this->assertInstanceOf(Time::class, $this->createTime());
+    }
 
     /**
      * @test
@@ -122,16 +131,15 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
+    private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): LocalTime
     {
-        return new Time($hour, $minute, $second);
+        return new LocalTime($hour, $minute, $second);
     }
 
     /**
      * @test
      */
-    public function itCanBeEqualToAnotherOne()
-    {
+    public function itCanBeEqualToAnotherOne()    {
         $time = $this->createTime();
         $this->assertInstanceOf(Equatable::class, $time);
 
