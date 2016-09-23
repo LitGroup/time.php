@@ -12,16 +12,7 @@ declare(strict_types = 1);
 
 namespace LitGroup\Time;
 
-/**
- * This interface defines common methods for representation of time in the ISO-8601 calendar system.
- *
- * @author Roman Shamritskiy <roman@litgroup.ru>
- */
-interface Time
+class Month
 {
-    public function getHour(): int;
-
-    public function getMinute(): int;
-
-    public function getSecond(): int;
+    // TODO (sharom): Not implemented yet.
 }

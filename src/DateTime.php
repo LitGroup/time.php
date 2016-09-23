@@ -12,16 +12,14 @@ declare(strict_types = 1);
 
 namespace LitGroup\Time;
 
+use LitGroup\Equatable\Equatable;
+
 /**
- * This interface defines common methods for representation of time in the ISO-8601 calendar system.
+ * This is the common interface for datetime-objects in the ISO-8601 calendar system.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-interface Time
+interface DateTime extends Date, Time, Equatable
 {
-    public function getHour(): int;
 
-    public function getMinute(): int;
-
-    public function getSecond(): int;
 }

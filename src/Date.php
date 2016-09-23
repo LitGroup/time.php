@@ -13,15 +13,15 @@ declare(strict_types = 1);
 namespace LitGroup\Time;
 
 /**
- * This interface defines common methods for representation of time in the ISO-8601 calendar system.
+ * This is the common interface for date-objects in the ISO-8601 calendar system.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-interface Time
+interface Date
 {
-    public function getHour(): int;
+    public function getYear(): Year;
 
-    public function getMinute(): int;
+    public function getMonth(): Month;
 
-    public function getSecond(): int;
+    public function getDayOfMonth(): int;
 }
