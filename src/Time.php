@@ -30,7 +30,7 @@ use LitGroup\Time\Exception\DateTimeException;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-class Time implements Equatable
+final class Time implements Equatable
 {
     /**
      * @var int
