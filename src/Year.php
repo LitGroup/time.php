@@ -15,7 +15,7 @@ namespace LitGroup\Time;
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
 
-class Year implements Equatable
+final class Year implements Equatable
 {
     const MIN_VALUE = 0;
     const MAX_VALUE = 9999;

@@ -50,14 +50,12 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne()
     {
-        $year = $this->createYear();
+        $year = $this->createYear(self::VALUE);
         $this->assertInstanceOf(Equatable::class, $year);
 
-        $another = $this->createMock(Year::class);
-        $another->method('getValue')->willReturnOnConsecutiveCalls(self::VALUE, self::VALUE - 1, self::VALUE + 1);
-        $this->assertTrue($year->equals($another));
-        $this->assertFalse($year->equals($another));
-        $this->assertFalse($year->equals($another));
+        $this->assertTrue($year->equals($this->createYear(self::VALUE)));
+        $this->assertFalse($year->equals($this->createYear(self::VALUE - 1)));
+        $this->assertFalse($year->equals($this->createYear(self::VALUE + 1)));
 
         $anotherEquatable = $this->createMock(Equatable::class);
         $this->assertFalse($year->equals($anotherEquatable));
@@ -65,6 +63,6 @@ class YearTest extends \PHPUnit_Framework_TestCase
 
     private function createYear(int $value = self::VALUE): Year
     {
-        return Year::of(2016);
+        return Year::of($value);
     }
 }
