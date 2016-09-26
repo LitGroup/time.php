@@ -132,17 +132,26 @@ class TimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider getEqualityExamples
      */
-    public function itIsEqualToAnotherOne()    {
-        $time = $this->createTime();
+    public function itIsEqualToAnotherOne(bool $equal, Equatable $another)    {
+        $time = $this->createTime(self::HOUR, self::MINUTE, self::SECOND);
         $this->assertInstanceOf(Equatable::class, $time);
+        $this->assertSame($equal, $time->equals($another));
+    }
 
-        $this->assertTrue($time->equals($this->createTime()));
-        $this->assertFalse($time->equals($this->createTime(self::HOUR + 1)));
-        $this->assertFalse($time->equals($this->createTime(self::HOUR, self::MINUTE + 1)));
-        $this->assertFalse($time->equals($this->createTime(self::HOUR, self::MINUTE, self::SECOND + 1)));
-
-        $this->assertFalse($time->equals($this->createMock(Equatable::class)));
+    public function getEqualityExamples(): array
+    {
+        return [
+            [true, Time::of(self::HOUR, self::MINUTE, self::SECOND)],
+            [false, Time::of(self::HOUR, self::MINUTE, self::SECOND - 1)],
+            [false, Time::of(self::HOUR, self::MINUTE, self::SECOND + 1)],
+            [false, Time::of(self::HOUR, self::MINUTE - 1, self::SECOND)],
+            [false, Time::of(self::HOUR, self::MINUTE + 1, self::SECOND)],
+            [false, Time::of(self::HOUR - 1, self::MINUTE, self::SECOND)],
+            [false, Time::of(self::HOUR + 1, self::MINUTE, self::SECOND)],
+            [false, $this->createMock(Equatable::class)],
+        ];
     }
 
     private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
