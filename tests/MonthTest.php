@@ -10,16 +10,15 @@
 
 declare(strict_types = 1);
 
-namespace LitGroup\Time;
+namespace Test\LitGroup\Time;
 
-use LitGroup\Equatable\Equatable;
-
-/**
- * This is the common interface for datetime-objects in the ISO-8601 calendar system.
- *
- * @author Roman Shamritskiy <roman@litgroup.ru>
- */
-interface DateTime extends Date, Time, Equatable
+class MonthTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @test
+     */
+    public function itIsInstantiable()
+    {
+        $this->markTestIncomplete();
+    }
 }

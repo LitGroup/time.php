@@ -15,7 +15,7 @@ namespace Test\LitGroup\Time;
 use LitGroup\Time\Month;
 use LitGroup\Time\Year;
 
-class LocalDateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

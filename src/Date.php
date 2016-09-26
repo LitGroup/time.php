@@ -12,16 +12,7 @@ declare(strict_types = 1);
 
 namespace LitGroup\Time;
 
-/**
- * This is the common interface for date-objects in the ISO-8601 calendar system.
- *
- * @author Roman Shamritskiy <roman@litgroup.ru>
- */
-interface Date
+class Date
 {
-    public function getYear(): Year;
 
-    public function getMonth(): Month;
-
-    public function getDayOfMonth(): int;
 }

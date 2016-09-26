@@ -14,10 +14,9 @@ namespace Test\LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
-use LitGroup\Time\LocalTime;
 use LitGroup\Time\Time;
 
-class LocalTimeTest extends \PHPUnit_Framework_TestCase
+class TimeTest extends \PHPUnit_Framework_TestCase
 {
     const HOUR = 5;
     const MINUTE = 6;
@@ -33,7 +32,7 @@ class LocalTimeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itImplementsTimeInterface()
+    public function itIsInitializable()
     {
         $this->assertInstanceOf(Time::class, $this->createTime());
     }
@@ -131,11 +130,6 @@ class LocalTimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): LocalTime
-    {
-        return new LocalTime($hour, $minute, $second);
-    }
-
     /**
      * @test
      */
@@ -149,5 +143,10 @@ class LocalTimeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($time->equals($this->createTime(self::HOUR, self::MINUTE, self::SECOND + 1)));
 
         $this->assertFalse($time->equals($this->createMock(Equatable::class)));
+    }
+
+    private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
+    {
+        return Time::of($hour, $minute, $second);
     }
 }
