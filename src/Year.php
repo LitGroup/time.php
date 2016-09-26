@@ -15,6 +15,13 @@ namespace LitGroup\Time;
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
 
+/**
+ * A year in the ISO-8601 calendar system, such as 2007.
+ *
+ * Year is an immutable date-time object that represents a year.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
 final class Year implements Equatable
 {
     const MIN_VALUE = 0;
