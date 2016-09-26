@@ -133,7 +133,7 @@ class TimeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itCanBeEqualToAnotherOne()    {
+    public function itIsEqualToAnotherOne()    {
         $time = $this->createTime();
         $this->assertInstanceOf(Equatable::class, $time);
 

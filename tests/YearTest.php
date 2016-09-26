@@ -17,14 +17,14 @@ use LitGroup\Time\Year;
 
 class YearTest extends \PHPUnit_Framework_TestCase
 {
-    const VALUE = 2016;
+    const RAW_VALUE = 2016;
 
     /**
      * @test
      */
-    public function itHasAValue()
+    public function itHasARawValue()
     {
-        $this->assertSame(self::VALUE, $this->createYear()->getValue());
+        $this->assertSame(self::RAW_VALUE, $this->createYear()->getRawValue());
     }
 
     /**
@@ -50,18 +50,18 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne()
     {
-        $year = $this->createYear(self::VALUE);
+        $year = $this->createYear(self::RAW_VALUE);
         $this->assertInstanceOf(Equatable::class, $year);
 
-        $this->assertTrue($year->equals($this->createYear(self::VALUE)));
-        $this->assertFalse($year->equals($this->createYear(self::VALUE - 1)));
-        $this->assertFalse($year->equals($this->createYear(self::VALUE + 1)));
+        $this->assertTrue($year->equals($this->createYear(self::RAW_VALUE)));
+        $this->assertFalse($year->equals($this->createYear(self::RAW_VALUE - 1)));
+        $this->assertFalse($year->equals($this->createYear(self::RAW_VALUE + 1)));
 
         $anotherEquatable = $this->createMock(Equatable::class);
         $this->assertFalse($year->equals($anotherEquatable));
     }
 
-    private function createYear(int $value = self::VALUE): Year
+    private function createYear(int $value = self::RAW_VALUE): Year
     {
         return Year::of($value);
     }

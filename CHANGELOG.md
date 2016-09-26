@@ -9,3 +9,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added `Time` value object. It represents time in the ISO-8601 calendar system (without time-zone).
 - Added `Year` value object.
+- Added `Month` value object.
+- Added `Date` value object. It represents date in the ISO-8601 calendar system (without time-zone).

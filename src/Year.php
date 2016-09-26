@@ -23,23 +23,23 @@ final class Year implements Equatable
     /**
      * @var int
      */
-    private $value;
+    private $rawValue;
 
     public static function of(int $isoYear): Year
     {
         return new self($isoYear);
     }
 
-    public function getValue(): int
+    public function getRawValue(): int
     {
-        return $this->value;
+        return $this->rawValue;
     }
 
     public function equals(Equatable $another): bool
     {
         return
             $another instanceof Year &&
-            $another->getValue() === $this->getValue();
+            $another->getRawValue() === $this->getRawValue();
     }
 
     private function __construct(int $value)
@@ -49,7 +49,7 @@ final class Year implements Equatable
 
     private function setValue(int $value)
     {
-        assert($this->value === null, 'Cannot be initialized twice.');
+        assert($this->rawValue === null, 'Cannot be initialized twice.');
 
         if ($value < self::MIN_VALUE || $value > self::MAX_VALUE) {
             throw new DateTimeException(sprintf(
@@ -60,6 +60,6 @@ final class Year implements Equatable
             ));
         }
 
-        $this->value = $value;
+        $this->rawValue = $value;
     }
 }

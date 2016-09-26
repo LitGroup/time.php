@@ -21,7 +21,7 @@ class MonthTest extends EnumerableTestCase
     /**
      * @test
      */
-    public function itIsInstantiable()
+    public function itIsInitializable()
     {
         $this->assertEnumHasRawValues([
             1 => Month::january(),
