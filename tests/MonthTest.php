@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace Test\LitGroup\Time;
 
 use LitGroup\Enumerable\Test\EnumerableTestCase;
-use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Month;
 
 class MonthTest extends EnumerableTestCase
