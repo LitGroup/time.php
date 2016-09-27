@@ -19,3 +19,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added value object `LocationId`.
 - Added `Location`.
 - Added `Locations` - repository of locations.
+- Added `ZonedDateTime`.
