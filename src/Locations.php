@@ -12,7 +12,59 @@ declare(strict_types = 1);
 
 namespace LitGroup\Time;
 
-final class Locations
+use LitGroup\Time\Exception\LocationDoesNotExistException;
+
+/**
+ * Repository of locations.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
+class Locations
 {
-    // TODO: Not implemented yet.
+    /**
+     * @var array|null
+     */
+    private static $locationsMap;
+
+    public function createId(string $rawIdValue): LocationId
+    {
+        return new LocationId($rawIdValue);
+    }
+
+    /**
+     * @throws LocationDoesNotExistException
+     */
+    public function getLocationOf(LocationId $locationId): Location
+    {
+        if (!self::locationExists($locationId)) {
+            throw new LocationDoesNotExistException($locationId);
+        }
+
+        return self::getLocationsMap()[$locationId->getRawValue()];
+    }
+
+    /**
+     * @return Location[]|array
+     */
+    public function getAllLocations(): array
+    {
+        return array_values(self::getLocationsMap());
+    }
+
+    private function locationExists(LocationId $id): bool
+    {
+        return \array_key_exists($id->getRawValue(), self::getLocationsMap());
+    }
+
+    private function getLocationsMap(): array
+    {
+        if (self::$locationsMap === null) {
+            self::$locationsMap = [];
+            foreach (\DateTimeZone::listIdentifiers() as $rawLocationId) {
+                self::$locationsMap[$rawLocationId] = Location::of(new LocationId($rawLocationId));
+            }
+        }
+
+        return self::$locationsMap;
+    }
 }
