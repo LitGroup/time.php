@@ -12,7 +12,39 @@ declare(strict_types = 1);
 
 namespace LitGroup\Time;
 
-final class LocationId
+use LitGroup\Equatable\Equatable;
+
+final class LocationId implements Equatable
 {
-    // TODO: Not implemented yet.
+    /**
+     * @var string
+     */
+    private $rawValue;
+
+    public function __construct(string $rawValue)
+    {
+        if (strlen(trim($rawValue)) === 0) {
+            throw new \InvalidArgumentException('Raw value of LocationId cannot be empty.');
+        }
+
+        $this->rawValue = $rawValue;
+    }
+
+    public function getRawValue(): string
+    {
+        return $this->rawValue;
+    }
+
+    public function equals(Equatable $another): bool
+    {
+        return
+            $another instanceof LocationId &&
+            $another->getRawValue() === $this->getRawValue();
+    }
+
+
+    public function __toString(): string
+    {
+        return $this->getRawValue();
+    }
 }
