@@ -19,6 +19,7 @@ use LitGroup\Time\LocationId;
 use LitGroup\Time\Month;
 use LitGroup\Time\Time;
 use LitGroup\Time\Year;
+use LitGroup\Time\Zone;
 use LitGroup\Time\ZonedDateTime;
 
 class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
@@ -31,9 +32,13 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     const MINUTE = 5;
     const SECOND = 7;
 
+    const TIMESTAMP = 1470269107;
+
     const LOCATION = "Europe/Moscow";
 
-    const TIMESTAMP = 1470269107;
+    const ZONE_ABBR = 'MSK';
+    const ZONE_OFFSET = 10800;
+    const ZONE_DST = false;
 
     /**
      * @var ZonedDateTime
@@ -118,7 +123,10 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasATimeZone()
     {
-        $this->markTestIncomplete();
+        $dateTime = $this->getDateTime();
+        $expectedZone = new Zone(self::ZONE_ABBR, self::ZONE_OFFSET, self::ZONE_DST);
+
+        $this->assertTrue($expectedZone->equals($dateTime->getZone()));
     }
 
     private function getDateTime(): ZonedDateTime
