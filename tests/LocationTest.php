@@ -31,14 +31,6 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     const ZONE_ABBR = 'MSK';
     const ZONE_DST = false;
 
-    const YEAR = 2016;
-    const MONTH = 8;
-    const DAY = 4;
-
-    const HOUR = 3;
-    const MINUTE = 5;
-    const SECOND = 7;
-
     const TIMESTAMP = 1470269107;
 
     /**
@@ -99,10 +91,9 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function itProvidesATimeZone()
     {
         $location = $this->getLocation();
-        $dateTime = $this->createDateTime($location);
         $expectedZone = new Zone(self::ZONE_ABBR, self::ZONE_OFFSET, self::ZONE_DST);
 
-        $this->assertTrue($expectedZone->equals($location->getZone($dateTime)));
+        $this->assertTrue($expectedZone->equals($location->getZone(self::TIMESTAMP)));
     }
 
     private function getLocation(): Location
@@ -113,22 +104,5 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     private function getLocationId(): LocationId
     {
         return $this->locationId;
-    }
-
-    private function createDateTime(Location $location): ZonedDateTime
-    {
-        return ZonedDateTime::of(
-            $location,
-            Date::of(
-                Year::of(self::YEAR),
-                Month::getValueOf(self::MONTH),
-                self::DAY
-            ),
-            Time::of(
-                self::HOUR,
-                self::MINUTE,
-                self::SECOND
-            )
-        );
     }
 }

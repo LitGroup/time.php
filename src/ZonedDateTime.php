@@ -60,7 +60,7 @@ final class ZonedDateTime implements DateTime
 
     public function getZone(): Zone
     {
-        return $this->getLocation()->getZone($this);
+        return $this->getLocation()->getZone($this->getSecondsSinceEpoch());
     }
 
     public function getSecondsSinceEpoch(): int

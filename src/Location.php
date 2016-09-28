@@ -32,10 +32,9 @@ final class Location implements Equatable
         return $this->id;
     }
 
-    public function getZone(ZonedDateTime $at): Zone
+    public function getZone(int $secondsSinceEpoch): Zone
     {
-        $atTimestamp = $at->getSecondsSinceEpoch();
-        $data = $this->getNativeTimeZone()->getTransitions($atTimestamp, $atTimestamp)[0];
+        $data = $this->getNativeTimeZone()->getTransitions($secondsSinceEpoch, $secondsSinceEpoch)[0];
 
         return new Zone($data['abbr'], $data['offset'], $data['isdst']);
     }
