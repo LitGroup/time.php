@@ -38,7 +38,7 @@ final class ZonedDateTime implements DateTime
     private $time;
 
 
-    public static function of(Location $location, Date $date, Time $time): ZonedDateTime
+    public static function ofDateAndTime(Location $location, Date $date, Time $time): ZonedDateTime
     {
         return new self($location, $date, $time);
     }
