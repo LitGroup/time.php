@@ -38,9 +38,15 @@ final class LocalDateTime implements DateTime, Equatable
      */
     private $time;
 
-    public static function of(Date $date, Time $time): LocalDateTime
+    public static function of(int $year, int $month = 1, int $day = 1, int $hour = 0, int $minute = 0, int $second = 0): LocalDateTime
     {
-        return new self($date, $time);
+        return new self(Date::of($year, $month, $day), Time::of($hour, $minute, $second));
+    }
+
+    public function __construct(Date $date, Time $time)
+    {
+        $this->date = $date;
+        $this->time = $time;
     }
 
     public function getDate(): Date
@@ -59,12 +65,5 @@ final class LocalDateTime implements DateTime, Equatable
             $another instanceof LocalDateTime &&
             $another->getDate()->equals($this->getDate()) &&
             $another->getTime()->equals($this->getTime());
-    }
-
-
-    private function __construct(Date $date, Time $time)
-    {
-        $this->date = $date;
-        $this->time = $time;
     }
 }

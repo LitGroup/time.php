@@ -30,6 +30,12 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     const MINUTE = 5;
     const SECOND = 7;
 
+    const DEFAULT_MONTH = 1;
+    const DEFAULT_DAY = 1;
+    const DEFAULT_HOUR = 0;
+    const DEFAULT_MINUTE = 0;
+    const DEFAULT_SECOND = 0;
+
     /**
      * @var LocalDateTime
      */
@@ -49,7 +55,7 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     {
         $this->date = new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
         $this->time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
-        $this->dateTime = LocalDateTime::of($this->date, $this->time);
+        $this->dateTime = new LocalDateTime($this->date, $this->time);
     }
 
     /**
@@ -92,48 +98,69 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     public function getEqualityExamples(): array
     {
         return [
-            [true, LocalDateTime::of(
+            [true, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND + 1))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND - 1))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE + 1, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE - 1, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR + 1, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR - 1, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY + 1),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY - 1),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH + 1), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH - 1), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR + 1), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
-            [false, LocalDateTime::of(
+            [false, new LocalDateTime(
                 new Date(Year::of(self::YEAR - 1), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, $this->createMock(Equatable::class)],
             [false, $this->createMock(Equatable::class)],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodForInitializationByScalarValues()
+    {
+        $this->assertTrue(
+            LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)->equals(
+                $this->getDateTime()
+            )
+        );
+
+        $this->assertTrue(
+            LocalDateTime::of(self::YEAR)->equals(
+                LocalDateTime::of(
+                    self::YEAR, self::DEFAULT_MONTH, self::DEFAULT_DAY,
+                    self::DEFAULT_HOUR, self::DEFAULT_MINUTE, self::DEFAULT_SECOND
+                )
+            )
+        );
     }
 
     private function getDateTime(): LocalDateTime

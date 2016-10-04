@@ -23,6 +23,9 @@ class DateTest extends \PHPUnit_Framework_TestCase
     const MONTH = 8;
     const DAY_OF_MONTH = 10;
 
+    const DEFAULT_MONTH = 1;
+    const DEFAULT_DAY_OF_MONTH = 1;
+
     /**
      * @var Date
      */
@@ -118,12 +121,16 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasAFactoryMethodForInitializationByScalarValues()
     {
-        $date = Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH);
-
-        $this->assertInstanceOf(Date::class, $date);
-        $this->assertTrue($date->getYear()->equals($this->getYear()));
-        $this->assertTrue($date->getMonth()->equals($this->getMonth()));
-        $this->assertSame(self::DAY_OF_MONTH, $date->getDayOfMonth());
+        $this->assertTrue(
+            Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH)->equals(
+                $this->getDate()
+            )
+        );
+        $this->assertTrue(
+            Date::of(self::YEAR)->equals(
+                Date::of(self::YEAR, self::DEFAULT_MONTH, self::DEFAULT_DAY_OF_MONTH)
+            )
+        );
     }
 
     private function getDate(): Date

@@ -43,9 +43,21 @@ final class Date implements Equatable
      */
     private $dayOfMonth;
 
-    public static function of(int $year, int $month, int $dayOfMonth): Date
+    public static function of(int $year, int $month = 1, int $dayOfMonth = 1): Date
     {
         return new self(Year::of($year), Month::getValueOf($month), $dayOfMonth);
+    }
+
+    public function __construct(Year $year, Month $month, int $dayOfMonth)
+    {
+        $this->year = $year;
+        $this->month = $month;
+
+        if (!checkdate((int) $month->getRawValue(), $dayOfMonth, $year->getRawValue())) {
+            throw new DateTimeException(sprintf(
+                'Invalid date (Y/m/d):', $year->getRawValue(), $month->getRawValue(), $dayOfMonth));
+        }
+        $this->dayOfMonth = $dayOfMonth;
     }
 
     public function getYear(): Year
@@ -70,17 +82,5 @@ final class Date implements Equatable
             $another->getYear()->equals($this->getYear()) &&
             $another->getMonth()->equals($this->getMonth()) &&
             $another->getDayOfMonth() === $this->getDayOfMonth();
-    }
-
-    public function __construct(Year $year, Month $month, int $dayOfMonth)
-    {
-        $this->year = $year;
-        $this->month = $month;
-
-        if (!checkdate((int) $month->getRawValue(), $dayOfMonth, $year->getRawValue())) {
-            throw new DateTimeException(sprintf(
-                'Invalid date (Y/m/d):', $year->getRawValue(), $month->getRawValue(), $dayOfMonth));
-        }
-        $this->dayOfMonth = $dayOfMonth;
     }
 }
