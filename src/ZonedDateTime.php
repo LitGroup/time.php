@@ -14,8 +14,9 @@ namespace LitGroup\Time;
 
 use DateTimeImmutable as NativeDateTime;
 use DateTimeZone as NativeTimeZone;
+use LitGroup\Equatable\Equatable;
 
-final class ZonedDateTime implements DateTime
+final class ZonedDateTime implements DateTime, Equatable
 {
     /**
      * @var NativeDateTime
@@ -37,6 +38,18 @@ final class ZonedDateTime implements DateTime
      */
     private $time;
 
+
+    public static function of(
+        Location $location,
+        int $year, int $month = 1, int $day = 1,
+        int $hour = 0, int $minute = 0, int $second = 0
+    ): ZonedDateTime {
+        return self::ofDateAndTime(
+            $location,
+            Date::of($year, $month, $day),
+            Time::of($hour, $minute, $second)
+        );
+    }
 
     public static function ofDateAndTime(Location $location, Date $date, Time $time): ZonedDateTime
     {
@@ -66,6 +79,13 @@ final class ZonedDateTime implements DateTime
     public function getSecondsSinceEpoch(): int
     {
         return $this->getNativeDateTime()->getTimestamp();
+    }
+
+    public function equals(Equatable $another): bool
+    {
+        return
+            $another instanceof ZonedDateTime &&
+            $another->getSecondsSinceEpoch() === $this->getSecondsSinceEpoch();
     }
 
     private function __construct(Location $location, Date $date, Time $time)

@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Test\LitGroup\Time;
 
+use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Date;
 use LitGroup\Time\DateTime;
 use LitGroup\Time\Location;
@@ -32,9 +33,16 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     const MINUTE = 5;
     const SECOND = 7;
 
+    const DEFAULT_MONTH = 1;
+    const DEFAULT_DAY = 1;
+    const DEFAULT_HOUR = 0;
+    const DEFAULT_MINUTE = 0;
+    const DEFAULT_SECOND = 0;
+
     const TIMESTAMP = 1470269107;
 
     const LOCATION = "Europe/Moscow";
+    const UTC_LOCATION = "UTC";
 
     const ZONE_ABBR = 'MSK';
     const ZONE_OFFSET = 10800;
@@ -127,6 +135,119 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         $expectedZone = new Zone(self::ZONE_ABBR, self::ZONE_OFFSET, self::ZONE_DST);
 
         $this->assertTrue($expectedZone->equals($dateTime->getZone()));
+    }
+
+    /**
+     * @test
+     * @dataProvider getEqualityExamples
+     */
+    public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
+    {
+        $dateTime = $this->getDateTime();
+        $this->assertInstanceOf(Equatable::class, $dateTime);
+        $this->assertSame($equal, $dateTime->equals($another));
+    }
+
+    public function getEqualityExamples(): array
+    {
+        return [
+            [
+                true,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR, self::MONTH, self::DAY),
+                    Time::of(self::HOUR, self::MINUTE, self::SECOND)
+                )
+            ],
+            [
+                true,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::UTC_LOCATION),
+                    Date::of(self::YEAR, self::MONTH, self::DAY),
+                    Time::of(self::HOUR - 3, self::MINUTE, self::SECOND)
+                )
+            ],
+            [
+                false,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR, self::MONTH, self::DAY),
+                    Time::of(self::HOUR, self::MINUTE, self::SECOND + 1)
+                )
+            ],
+            [
+                false,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR, self::MONTH, self::DAY),
+                    Time::of(self::HOUR, self::MINUTE + 1, self::SECOND)
+                )
+            ],
+            [
+                false,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR, self::MONTH, self::DAY),
+                    Time::of(self::HOUR + 1, self::MINUTE, self::SECOND)
+                )
+            ],
+            [
+                false,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR, self::MONTH, self::DAY + 1),
+                    Time::of(self::HOUR, self::MINUTE, self::SECOND)
+                )
+            ],
+            [
+                false,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR, self::MONTH + 1, self::DAY),
+                    Time::of(self::HOUR, self::MINUTE, self::SECOND)
+                )
+            ],
+            [
+                false,
+                ZonedDateTime::ofDateAndTime(
+                    Location::of(self::LOCATION),
+                    Date::of(self::YEAR + 1, self::MONTH, self::DAY),
+                    Time::of(self::HOUR, self::MINUTE, self::SECOND)
+                )
+            ],
+            [
+                false,
+                $this->createMock(Equatable::class)
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodWithInitializationByScalarValues()
+    {
+        $this->assertTrue(
+            ZonedDateTime::of($this->getLocation(), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)
+                ->equals(
+                    $this->getDateTime()
+                )
+        );
+
+        $this->assertTrue(
+            ZonedDateTime::of($this->getLocation(), self::YEAR)
+                ->equals(
+                    ZonedDateTime::of(
+                        $this->getLocation(),
+                        self::YEAR,
+                        self::DEFAULT_MONTH,
+                        self::DEFAULT_DAY,
+                        self::DEFAULT_HOUR,
+                        self::DEFAULT_MINUTE,
+                        self::DEFAULT_SECOND
+                    )
+                )
+        );
     }
 
     private function getDateTime(): ZonedDateTime
