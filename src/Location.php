@@ -15,6 +15,11 @@ namespace LitGroup\Time;
 use LitGroup\Equatable\Equatable;
 use DateTimeZone as NativeTimeZone;
 
+/**
+ * Timezone-related location.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
 final class Location implements Equatable
 {
     /**

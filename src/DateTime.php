@@ -12,6 +12,11 @@ declare(strict_types = 1);
 
 namespace LitGroup\Time;
 
+/**
+ * Basic interface for value-object with date and time.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
 interface DateTime
 {
     public function getDate(): Date;

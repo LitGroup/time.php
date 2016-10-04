@@ -16,6 +16,15 @@ use DateTimeImmutable as NativeDateTime;
 use DateTimeZone as NativeTimeZone;
 use LitGroup\Equatable\Equatable;
 
+/**
+ * A date-time with a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30+03:00 Europe/Moscow.
+ *
+ * ZonedDateTime is an immutable representation of a date-time with a time-zone.
+ * This class stores all date and time fields, to a precision of seconds, and
+ * a time-zone, with a zone offset used to handle ambiguous local date-times.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
 final class ZonedDateTime implements DateTime, Equatable
 {
     /**

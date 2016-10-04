@@ -14,6 +14,11 @@ namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 
+/**
+ * Identifier of zone-related location. For example: Europe/Moscow.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
 final class LocationId implements Equatable
 {
     /**

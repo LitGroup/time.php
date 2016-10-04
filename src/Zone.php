@@ -14,6 +14,11 @@ namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 
+/**
+ * Time zone with zone-related offset from UTC.
+ *
+ * @author Roman Shamritskiy <roman@litgroup.ru>
+ */
 final class Zone implements Equatable
 {
     /**
