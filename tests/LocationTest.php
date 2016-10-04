@@ -106,6 +106,17 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodForInstantiationOfUtcLocation()
+    {
+        $location = Location::utc();
+
+        $this->assertInstanceOf(Location::class, $location);
+        $this->assertTrue(Location::of('UTC')->equals($location));
+    }
+
     private function getLocation(): Location
     {
         return $this->location;

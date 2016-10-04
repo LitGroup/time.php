@@ -23,6 +23,11 @@ use DateTimeZone as NativeTimeZone;
 final class Location implements Equatable
 {
     /**
+     * @var Location
+     */
+    private static $utc;
+
+    /**
      * @var LocationId
      */
     private $id;
@@ -35,6 +40,15 @@ final class Location implements Equatable
     public static function ofId(LocationId $id): Location
     {
         return new self($id);
+    }
+
+    public static function utc(): Location
+    {
+        if (self::$utc === null) {
+            self::$utc = self::of('UTC');
+        }
+
+        return self::$utc;
     }
 
     public function getId(): LocationId

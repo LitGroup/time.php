@@ -26,6 +26,9 @@ class Locations
      */
     private static $locationsMap;
 
+    /**
+     * Factory method for instantiation of LocationId.
+     */
     public function createId(string $rawIdValue): LocationId
     {
         return new LocationId($rawIdValue);
