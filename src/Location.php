@@ -22,7 +22,12 @@ final class Location implements Equatable
      */
     private $id;
 
-    public static function of(LocationId $id): Location
+    public static function of(string $rawId): Location
+    {
+        return self::ofId(new LocationId($rawId));
+    }
+
+    public static function ofId(LocationId $id): Location
     {
         return new self($id);
     }

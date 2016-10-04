@@ -46,7 +46,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->locationId = new LocationId(self::ID);
-        $this->location = Location::of($this->locationId);
+        $this->location = Location::ofId($this->locationId);
     }
 
     /**
@@ -79,8 +79,8 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function getEqualityExamples(): array
     {
         return [
-            [true, Location::of(new LocationId(self::ID))],
-            [false, Location::of(new LocationId(self::ANOTHER_ID))],
+            [true, Location::ofId(new LocationId(self::ID))],
+            [false, Location::ofId(new LocationId(self::ANOTHER_ID))],
             [false, $this->createMock(Equatable::class)],
         ];
     }
@@ -94,6 +94,16 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $expectedZone = new Zone(self::ZONE_ABBR, self::ZONE_OFFSET, self::ZONE_DST);
 
         $this->assertTrue($expectedZone->equals($location->getZone(self::TIMESTAMP)));
+    }
+
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodWithInitializationByRawId()
+    {
+        $this->assertTrue(
+            $this->getLocation()->equals(Location::of(self::ID))
+        );
     }
 
     private function getLocation(): Location

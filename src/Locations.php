@@ -61,7 +61,7 @@ class Locations
         if (self::$locationsMap === null) {
             self::$locationsMap = [];
             foreach (\DateTimeZone::listIdentifiers() as $rawLocationId) {
-                self::$locationsMap[$rawLocationId] = Location::of(new LocationId($rawLocationId));
+                self::$locationsMap[$rawLocationId] = Location::ofId(new LocationId($rawLocationId));
             }
         }
 

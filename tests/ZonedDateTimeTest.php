@@ -62,7 +62,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->location = Location::of(new LocationId(self::LOCATION));
+        $this->location = Location::ofId(new LocationId(self::LOCATION));
         $this->date = new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
         $this->time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
         $this->dateTime = ZonedDateTime::ofDateAndTime($this->location, $this->date, $this->time);
