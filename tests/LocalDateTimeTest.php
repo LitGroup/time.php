@@ -47,7 +47,7 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->date = Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
+        $this->date = new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
         $this->time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
         $this->dateTime = LocalDateTime::of($this->date, $this->time);
     }
@@ -93,43 +93,43 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND + 1))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND - 1))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE + 1, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE - 1, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR + 1, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR - 1, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY + 1),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY + 1),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY - 1),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY - 1),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH + 1), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH + 1), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH - 1), self::DAY),
+                new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH - 1), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR + 1), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR + 1), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, LocalDateTime::of(
-                Date::of(Year::of(self::YEAR - 1), Month::getValueOf(self::MONTH), self::DAY),
+                new Date(Year::of(self::YEAR - 1), Month::getValueOf(self::MONTH), self::DAY),
                 Time::of(self::HOUR, self::MINUTE, self::SECOND))],
             [false, $this->createMock(Equatable::class)],
             [false, $this->createMock(Equatable::class)],

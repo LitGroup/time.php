@@ -43,9 +43,9 @@ final class Date implements Equatable
      */
     private $dayOfMonth;
 
-    public static function of(Year $year, Month $month, int $dayOfMonth): Date
+    public static function of(int $year, int $month, int $dayOfMonth): Date
     {
-        return new self($year, $month, $dayOfMonth);
+        return new self(Year::of($year), Month::getValueOf($month), $dayOfMonth);
     }
 
     public function getYear(): Year
@@ -72,7 +72,7 @@ final class Date implements Equatable
             $another->getDayOfMonth() === $this->getDayOfMonth();
     }
 
-    private function __construct(Year $year, Month $month, int $dayOfMonth)
+    public function __construct(Year $year, Month $month, int $dayOfMonth)
     {
         $this->year = $year;
         $this->month = $month;

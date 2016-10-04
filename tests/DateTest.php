@@ -42,7 +42,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $this->year = Year::of(self::YEAR);
         $this->month = Month::getValueOf(8);
-        $this->date = Date::of($this->year, $this->month, self::DAY_OF_MONTH);
+        $this->date = new Date($this->year, $this->month, self::DAY_OF_MONTH);
     }
 
     /**
@@ -76,7 +76,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itThrowsAnExceptionWhenDayOfMonthIsInvalidDuringInstantiation(Year $year, Month $month, int $day)
     {
-        Date::of($year, $month, $day);
+        new Date($year, $month, $day);
     }
 
     public function getInvalidDateExamples(): array
@@ -102,15 +102,28 @@ class DateTest extends \PHPUnit_Framework_TestCase
     public function getEqualityExamples(): array
     {
         return [
-            [true, Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH)],
-            [false, Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH - 1)],
-            [false, Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH + 1)],
-            [false, Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH - 1), self::DAY_OF_MONTH)],
-            [false, Date::of(Year::of(self::YEAR), Month::getValueOf(self::MONTH + 1), self::DAY_OF_MONTH)],
-            [false, Date::of(Year::of(self::YEAR - 1), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH)],
-            [false, Date::of(Year::of(self::YEAR + 1), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH)],
+            [true, new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH)],
+            [false, new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH - 1)],
+            [false, new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH + 1)],
+            [false, new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH - 1), self::DAY_OF_MONTH)],
+            [false, new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH + 1), self::DAY_OF_MONTH)],
+            [false, new Date(Year::of(self::YEAR - 1), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH)],
+            [false, new Date(Year::of(self::YEAR + 1), Month::getValueOf(self::MONTH), self::DAY_OF_MONTH)],
             [false, $this->createMock(Equatable::class)],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodForInitializationByScalarValues()
+    {
+        $date = Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH);
+
+        $this->assertInstanceOf(Date::class, $date);
+        $this->assertTrue($date->getYear()->equals($this->getYear()));
+        $this->assertTrue($date->getMonth()->equals($this->getMonth()));
+        $this->assertSame(self::DAY_OF_MONTH, $date->getDayOfMonth());
     }
 
     private function getDate(): Date
