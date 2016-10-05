@@ -25,8 +25,8 @@ class SimpleDateParser implements DateParser
 {
     public function parseDate(string $str): Date
     {
-        $matches = [];
         try {
+            $matches = [];
             if (preg_match('/^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})$/Ds', $str, $matches) === 1) {
                 return Date::of(
                     intval($matches['year'], 10),
