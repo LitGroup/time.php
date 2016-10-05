@@ -45,6 +45,11 @@ class FormatException extends Exception
         );
     }
 
+    private static function createMessageFor(string $temporalType, string $invalidString): string
+    {
+        return sprintf('Given string does not contain valid %s: "%s".', $temporalType, $invalidString);
+    }
+
     public function __construct(string $message, string $invalidString)
     {
         parent::__construct($message);
@@ -54,10 +59,5 @@ class FormatException extends Exception
     public function getInvalidString(): string
     {
         return $this->invalidString;
-    }
-
-    private static function createMessageFor(string $temporalType, string $invalidString): string
-    {
-        return sprintf('Given string does not contain valid %s: "%s".', $temporalType, $invalidString);
     }
 }

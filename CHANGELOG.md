@@ -27,3 +27,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added interface `Format\TimeFormatter`.
 - Added interface `Format\TimeParser`.
 - Added exception `Exception\FormatException`.
+- Added `Format\SimpleDateFormatter` which makes formatting of a date to the format `YYYY-MM-DD`.
