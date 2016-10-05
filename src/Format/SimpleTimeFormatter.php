@@ -15,7 +15,7 @@ namespace LitGroup\Time\Format;
 use LitGroup\Time\Time;
 
 /**
- * Makes formatting of time to the simple, but frequently used format: HH:mm:ss.
+ * Makes formatting of time to the simple, but frequently used format: `HH:mm:ss`.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */

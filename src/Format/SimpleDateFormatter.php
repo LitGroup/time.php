@@ -15,7 +15,7 @@ namespace LitGroup\Time\Format;
 use LitGroup\Time\Date;
 
 /**
- * Makes formatting of date to the simple, but frequently used format: YYYY-MM-DD.
+ * Makes formatting of date to the simple, but frequently used format: `YYYY-MM-DD`.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
