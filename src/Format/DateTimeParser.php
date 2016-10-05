@@ -22,7 +22,7 @@ use LitGroup\Time\Exception\FormatException;
  *
  * @author Roman Sahmritskiy <roman@litgroup.ru>
  */
-interface Parser
+interface DateTimeParser
 {
     /**
      * Parses LocalDateTime from string.

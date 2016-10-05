@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `ZonedDateTime`.
 - Added `Zone`.
 - Added interface `Format\DateTimeFormatter`.
-- Added interface `Format\DateTimeParserParser`.
+- Added interface `Format\DateTimeParser`.
 - Added interface `Format\DateFormatter`.
 - Added interface `Format\DateParser`.
 - Added interface `Format\TimeFormatter`.
@@ -32,3 +32,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `Format\SimpleDateTimeFormatter` which makes formatting of time to the format `YYYY-MM-DD HH:mm:ss`.
 - Added `Format\SimpleDateParser` which parses `Date` from a string representation of the format `YYYY-MM-DD`.
 - Added `Format\SimpleTimeParser` which parses `Time` from a string representation of formats: `HH:mm` and `HH:mm:ss`.
+- Added `Format\SimpleDateTimeParser` which parses date and time from a string representation of formats:
+  `YYYY-MM-DD HH:mm:ss`.

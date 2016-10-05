@@ -30,6 +30,7 @@ abstract class DateParserTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @testdox It is a subtype of DateParser
      */
     final public function itIsASubtypeOfDateParser()
     {

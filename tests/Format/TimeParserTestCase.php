@@ -30,6 +30,7 @@ abstract class TimeParserTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @testdox It is a subtype of TimeParser
      */
     final public function itIsASubtypeOfTimeParser()
     {
