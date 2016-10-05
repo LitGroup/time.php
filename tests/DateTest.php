@@ -133,6 +133,27 @@ class DateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @test
+     * @expectedException \LitGroup\Time\Exception\DateTimeException
+     * @dataProvider getInvalidScalarValuesExamples
+     */
+    public function itThrowsAnExceptionWhenDateIsInvalidDuringInstantiationByScalarValues(int $year, int $month, int $day)
+    {
+        Date::of($year, $month, $day);
+    }
+
+    public function getInvalidScalarValuesExamples(): array
+    {
+        return [
+            [Year::MIN_VALUE - 1, 1, 1],
+            [Year::MAX_VALUE + 1, 1, 1],
+            [Year::MIN_VALUE, 0, 1],
+            [Year::MIN_VALUE, 13, 1],
+            [2016, 12, 32],
+        ];
+    }
+
     private function getDate(): Date
     {
         return $this->date;

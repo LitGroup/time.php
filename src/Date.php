@@ -45,7 +45,11 @@ final class Date implements Equatable
 
     public static function of(int $year, int $month = 1, int $dayOfMonth = 1): Date
     {
-        return new self(Year::of($year), Month::getValueOf($month), $dayOfMonth);
+        try {
+            return new self(Year::of($year), Month::getValueOf($month), $dayOfMonth);
+        } catch (\OutOfBoundsException $e) {
+            throw new DateTimeException("Invalid number of month $month.");
+        }
     }
 
     public function __construct(Year $year, Month $month, int $dayOfMonth)
