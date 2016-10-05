@@ -24,7 +24,7 @@ use LitGroup\Time\Exception\DateTimeException;
  */
 final class Year implements Equatable
 {
-    const MIN_VALUE = 0;
+    const MIN_VALUE = 1;
     const MAX_VALUE = 9999;
 
     /**
