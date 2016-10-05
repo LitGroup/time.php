@@ -30,3 +30,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `Format\SimpleDateFormatter` which makes formatting of date to the format `YYYY-MM-DD`.
 - Added `Format\SimpleTimeFormatter` which makes formatting of time to the format `HH:mm:ss`.
 - Added `Format\SimpleDateTimeFormatter` which makes formatting of time to the format `YYYY-MM-DD HH:mm:ss`.
+- Added `Format\SimpleDateParsing` which parses `Date` from a string representation of the format `YYYY-MM-DD`.
