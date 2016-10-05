@@ -16,24 +16,19 @@ use LitGroup\Time\Exception\FormatException;
 
 class FormatExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    const MESSAGE = 'Some exception message.';
+    const INVALID_STRING = 'some invalid string';
 
-    /**
-     * @var FormatException
-     */
-    private $exception;
-
-    protected function setUp()
-    {
-        $this->exception = new FormatException(self::MESSAGE);
-    }
+    const MESSAGE = 'Some message.';
+    const INVALID_DATE_FORMAT_MESSAGE = 'Given string does not contain valid date: "some invalid string".';
+    const INVALID_TIME_FORMAT_MESSAGE = 'Given string does not contain valid time: "some invalid string".';
+    const INVALID_DATETIME_FORMAT_MESSAGE = 'Given string does not contain valid date and time: "some invalid string".';
 
     /**
      * @test
      */
     public function itIsASubtypeOfException()
     {
-        $this->assertInstanceOf(\Exception::class, $this->getFormatException());
+        $this->assertInstanceOf(\Exception::class, $this->createFormatException());
     }
 
     /**
@@ -41,11 +36,55 @@ class FormatExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasAMessage()
     {
-        $this->assertSame(self::MESSAGE, $this->getFormatException()->getMessage());
+        $this->assertSame(self::MESSAGE, $this->createFormatException()->getMessage());
     }
 
-    private function getFormatException(): FormatException
+    /**
+     * @test
+     */
+    public function itHasAnInvalidString()
     {
-        return $this->exception;
+        $this->assertSame(self::INVALID_STRING, $this->createFormatException()->getInvalidString());
+    }
+
+    /**
+     * @test
+     * @testdox It can be constructed through invalidDateFormat() factory
+     */
+    public function itCanBeConstructedThroughInvalidDateFormatFactory()
+    {
+        $exception = FormatException::invalidDateFormat(self::INVALID_STRING);
+        $this->assertInstanceOf(FormatException::class, $exception);
+        $this->assertSame(self::INVALID_DATE_FORMAT_MESSAGE, $exception->getMessage());
+        $this->assertSame(self::INVALID_STRING, $exception->getInvalidString());
+    }
+
+    /**
+     * @test
+     * @testdox It can be constructed through invalidTimeFormat() factory
+     */
+    public function itCanBeConstructedThroughInvalidTimeFormatFactory()
+    {
+        $exception = FormatException::invalidTimeFormat(self::INVALID_STRING);
+        $this->assertInstanceOf(FormatException::class, $exception);
+        $this->assertSame(self::INVALID_TIME_FORMAT_MESSAGE, $exception->getMessage());
+        $this->assertSame(self::INVALID_STRING, $exception->getInvalidString());
+    }
+
+    /**
+     * @test
+     * @testdox It can be constructed through invalidDateTimeFormat() factory
+     */
+    public function itCanBeConstructedThroughInvalidDateTimeFormatFactory()
+    {
+        $exception = FormatException::invalidDateTimeFormat(self::INVALID_STRING);
+        $this->assertInstanceOf(FormatException::class, $exception);
+        $this->assertSame(self::INVALID_DATETIME_FORMAT_MESSAGE, $exception->getMessage());
+        $this->assertSame(self::INVALID_STRING, $exception->getInvalidString());
+    }
+
+    private function createFormatException(): FormatException
+    {
+        return new FormatException(self::MESSAGE, self::INVALID_STRING);
     }
 }
