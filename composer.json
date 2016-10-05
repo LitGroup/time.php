@@ -1,6 +1,6 @@
 {
     "name": "litgroup/time",
-    "description": "DateTime library for PHP 7+",
+    "description": "Date and time library for PHP 7+",
     "keywords": ["datetime", "date", "time"],
     "type": "library",
     "license": "MIT",
