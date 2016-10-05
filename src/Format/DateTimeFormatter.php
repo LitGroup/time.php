@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the "litgroup/datetime" package.
+ * This file is part of the "litgroup/time" package.
  *
  * (c) Roman Shamritskiy <roman@litgroup.ru>
  *
