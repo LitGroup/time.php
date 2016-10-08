@@ -33,9 +33,9 @@ final class ZonedDateTime implements DateTime, Equatable
     private $nativeDateTime;
 
     /**
-     * @var Location
+     * @var TimeZone
      */
-    private $location;
+    private $timeZone;
 
     /**
      * @var Date
@@ -49,20 +49,20 @@ final class ZonedDateTime implements DateTime, Equatable
 
 
     public static function of(
-        Location $location,
+        TimeZone $timeZone,
         int $year, int $month = 1, int $day = 1,
         int $hour = 0, int $minute = 0, int $second = 0
     ): ZonedDateTime {
         return self::ofDateAndTime(
-            $location,
+            $timeZone,
             Date::of($year, $month, $day),
             Time::of($hour, $minute, $second)
         );
     }
 
-    public static function ofDateAndTime(Location $location, Date $date, Time $time): ZonedDateTime
+    public static function ofDateAndTime(TimeZone $timeZone, Date $date, Time $time): ZonedDateTime
     {
-        return new self($location, $date, $time);
+        return new self($timeZone, $date, $time);
     }
 
     public function getDate(): Date
@@ -75,14 +75,14 @@ final class ZonedDateTime implements DateTime, Equatable
         return $this->time;
     }
 
-    public function getLocation(): Location
+    public function getTimeZone(): TimeZone
     {
-        return $this->location;
+        return $this->timeZone;
     }
 
-    public function getZone(): Zone
+    public function getOffset(): Offset
     {
-        return $this->getLocation()->getZone($this->getSecondsSinceEpoch());
+        return $this->getTimeZone()->getOffsetAt($this->getSecondsSinceEpoch());
     }
 
     public function getSecondsSinceEpoch(): int
@@ -97,9 +97,9 @@ final class ZonedDateTime implements DateTime, Equatable
             $another->getSecondsSinceEpoch() === $this->getSecondsSinceEpoch();
     }
 
-    private function __construct(Location $location, Date $date, Time $time)
+    private function __construct(TimeZone $timeZone, Date $date, Time $time)
     {
-        $this->location = $location;
+        $this->timeZone = $timeZone;
         $this->date = $date;
         $this->time = $time;
         $this->nativeDateTime = NativeDateTime::createFromFormat(
@@ -113,7 +113,7 @@ final class ZonedDateTime implements DateTime, Equatable
                 $time->getMinute(),
                 $time->getSecond()
             ),
-            new NativeTimeZone($location->getId()->getRawValue())
+            new NativeTimeZone($timeZone->getId()->getRawValue())
         );
     }
 

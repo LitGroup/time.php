@@ -16,33 +16,33 @@ use LitGroup\Equatable\Equatable;
 use DateTimeZone as NativeTimeZone;
 
 /**
- * Timezone-related location.
+ * Time zone (ISO-8601).
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class Location implements Equatable
+final class TimeZone implements Equatable
 {
     /**
-     * @var Location
+     * @var TimeZone
      */
     private static $utc;
 
     /**
-     * @var LocationId
+     * @var TimeZoneId
      */
     private $id;
 
-    public static function of(string $rawId): Location
+    public static function of(string $rawId): TimeZone
     {
-        return self::ofId(new LocationId($rawId));
+        return self::ofId(new TimeZoneId($rawId));
     }
 
-    public static function ofId(LocationId $id): Location
+    public static function ofId(TimeZoneId $id): TimeZone
     {
         return new self($id);
     }
 
-    public static function utc(): Location
+    public static function utc(): TimeZone
     {
         if (self::$utc === null) {
             self::$utc = self::of('UTC');
@@ -51,22 +51,22 @@ final class Location implements Equatable
         return self::$utc;
     }
 
-    public function getId(): LocationId
+    public function getId(): TimeZoneId
     {
         return $this->id;
     }
 
-    public function getZone(int $secondsSinceEpoch): Zone
+    public function getOffsetAt(int $secondSinceEpoch): Offset
     {
-        $data = $this->getNativeTimeZone()->getTransitions($secondsSinceEpoch, $secondsSinceEpoch)[0];
+        $data = $this->getNativeTimeZone()->getTransitions($secondSinceEpoch, $secondSinceEpoch)[0];
 
-        return new Zone($data['abbr'], $data['offset'], $data['isdst']);
+        return new Offset($data['abbr'], $data['offset'], $data['isdst']);
     }
 
     public function equals(Equatable $another): bool
     {
         return
-            $another instanceof Location &&
+            $another instanceof TimeZone &&
             $another->getId()->equals($this->getId());
     }
 
@@ -75,7 +75,7 @@ final class Location implements Equatable
         return $this->getId()->getRawValue();
     }
 
-    private function __construct(LocationId $id)
+    private function __construct(TimeZoneId $id)
     {
         $this->id = $id;
     }

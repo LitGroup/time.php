@@ -13,22 +13,22 @@ declare(strict_types = 1);
 namespace Test\LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
-use LitGroup\Time\Zone;
+use LitGroup\Time\Offset;
 
-class ZoneTest extends \PHPUnit_Framework_TestCase
+class OffsetTest extends \PHPUnit_Framework_TestCase
 {
     const ABBREVIATION = 'MSK';
-    const OFFSET_IN_SECONDS = 10800;
+    const TOTAL_SECONDS = 10800;
 
     const ANOTHER_ABBREVIATION = 'MSD';
-    const ANOTHER_OFFSET_IN_SECOND = 14400;
+    const ANOTHER_TOTAL_SECONDS = 14400;
 
     /**
      * @test
      */
     public function itHasAnAbbreviation()
     {
-        $zone = $this->createZone();
+        $zone = $this->createOffset();
         $this->assertSame(self::ABBREVIATION, $zone->getAbbreviation());
     }
 
@@ -39,7 +39,7 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
      */
     public function itThrowsAnExceptionWhenAbbreviationIsEmptyDuringInstantiation(string $abbr)
     {
-        $this->createZone($abbr);
+        $this->createOffset($abbr);
     }
 
     public function getEmptyAbbreviationExamples(): array
@@ -53,26 +53,26 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itHasAnOffsetInSeconds()
+    public function itHasAValueOfTotalSeconds()
     {
-        $zone = $this->createZone();
-        $this->assertSame(self::OFFSET_IN_SECONDS, $zone->getOffsetInSeconds());
+        $zone = $this->createOffset();
+        $this->assertSame(self::TOTAL_SECONDS, $zone->getTotalSeconds());
     }
 
     /**
      * @test
-     * @dataProvider getOffsetIdExamples
+     * @dataProvider getIdExamples
      */
-    public function itHasAnOffsetId(string $expectedId, int $offset)
+    public function itHasAnId(string $expectedId, int $offset)
     {
-        $zone = $this->createZone(self::ABBREVIATION, $offset);
-        $this->assertSame($expectedId, $zone->getOffsetId());
+        $zone = $this->createOffset(self::ABBREVIATION, $offset);
+        $this->assertSame($expectedId, $zone->getId());
     }
 
-    public function getOffsetIdExamples(): array
+    public function getIdExamples(): array
     {
         return [
-            ['+00:00', 0],
+            ['Z', 0],
             ['+00:01', 60],
             ['-00:01', -60],
             ['+00:10', 600],
@@ -85,6 +85,8 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
             ['-03:00', -10800],
             ['+03:30', 12600],
             ['-03:30', -12600],
+            ['+03:30:10', 12610],
+            ['-03:30:10', -12610],
         ];
     }
 
@@ -93,8 +95,8 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
      */
     public function itCanRepresentDailySavingTimeOrNot()
     {
-        $this->assertTrue($this->createZone(self::ABBREVIATION, self::OFFSET_IN_SECONDS, true)->isDst());
-        $this->assertFalse($this->createZone(self::ABBREVIATION, self::OFFSET_IN_SECONDS, false)->isDst());
+        $this->assertTrue($this->createOffset(self::ABBREVIATION, self::TOTAL_SECONDS, true)->isDst());
+        $this->assertFalse($this->createOffset(self::ABBREVIATION, self::TOTAL_SECONDS, false)->isDst());
     }
 
     /**
@@ -103,7 +105,7 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
     {
-        $zone = $this->createZone();
+        $zone = $this->createOffset();
         $this->assertInstanceOf(Equatable::class, $zone);
         $this->assertSame($equal, $zone->equals($another));
     }
@@ -111,16 +113,16 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
     public function getEqualityExamples(): array
     {
         return [
-            [true, $this->createZone(self::ABBREVIATION, self::OFFSET_IN_SECONDS, false)],
-            [false, $this->createZone(self::ANOTHER_ABBREVIATION)],
-            [false, $this->createZone(self::ABBREVIATION, self::ANOTHER_OFFSET_IN_SECOND)],
-            [false, $this->createZone(self::ABBREVIATION, self::OFFSET_IN_SECONDS, true)],
+            [true, $this->createOffset(self::ABBREVIATION, self::TOTAL_SECONDS, false)],
+            [false, $this->createOffset(self::ANOTHER_ABBREVIATION)],
+            [false, $this->createOffset(self::ABBREVIATION, self::ANOTHER_TOTAL_SECONDS)],
+            [false, $this->createOffset(self::ABBREVIATION, self::TOTAL_SECONDS, true)],
             [false, $this->createMock(Equatable::class)],
         ];
     }
 
-    private function createZone(string $abbr = self::ABBREVIATION, int $offset = self::OFFSET_IN_SECONDS, bool $dst = false): Zone
+    private function createOffset(string $abbr = self::ABBREVIATION, int $offset = self::TOTAL_SECONDS, bool $dst = false): Offset
     {
-        return new Zone($abbr, $offset, $dst);
+        return new Offset($abbr, $offset, $dst);
     }
 }

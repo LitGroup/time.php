@@ -13,9 +13,9 @@ declare(strict_types = 1);
 namespace Test\LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
-use LitGroup\Time\LocationId;
+use LitGroup\Time\TimeZoneId;
 
-class LocationIdTest extends \PHPUnit_Framework_TestCase
+class TimeZoneIdTest extends \PHPUnit_Framework_TestCase
 {
     const RAW_VALUE = 'Europe/Moscow';
     const ANOTHER_RAW_VALUE = 'UTC';
@@ -25,7 +25,7 @@ class LocationIdTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasARawValue()
     {
-        $id = $this->createLocationId();
+        $id = $this->createTimeZoneId();
         $this->assertSame(self::RAW_VALUE, $id->getRawValue());
     }
 
@@ -36,7 +36,7 @@ class LocationIdTest extends \PHPUnit_Framework_TestCase
      */
     public function itThrowsAnExceptionWhenRawValueIsEmptyDuringInstantiation(string $rawValue)
     {
-        $this->createLocationId($rawValue);
+        $this->createTimeZoneId($rawValue);
     }
 
     public function getInvalidRawValueExamples(): array
@@ -52,7 +52,7 @@ class LocationIdTest extends \PHPUnit_Framework_TestCase
      */
     public function itCanBeConvertedToString()
     {
-        $id = $this->createLocationId();
+        $id = $this->createTimeZoneId();
         $this->assertSame(self::RAW_VALUE, (string) $id);
     }
 
@@ -62,7 +62,7 @@ class LocationIdTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
     {
-        $id = $this->createLocationId(self::RAW_VALUE);
+        $id = $this->createTimeZoneId(self::RAW_VALUE);
         $this->assertInstanceOf(Equatable::class, $id);
         $this->assertSame($equal, $id->equals($another));
     }
@@ -70,14 +70,14 @@ class LocationIdTest extends \PHPUnit_Framework_TestCase
     public function getEqualityExamples(): array
     {
         return [
-            [true, $this->createLocationId(self::RAW_VALUE)],
-            [false, $this->createLocationId(self::ANOTHER_RAW_VALUE)],
+            [true, $this->createTimeZoneId(self::RAW_VALUE)],
+            [false, $this->createTimeZoneId(self::ANOTHER_RAW_VALUE)],
             [false, $this->createMock(Equatable::class)],
         ];
     }
 
-    private function createLocationId(string $rawValue = self::RAW_VALUE): LocationId
+    private function createTimeZoneId(string $rawValue = self::RAW_VALUE): TimeZoneId
     {
-        return new LocationId($rawValue);
+        return new TimeZoneId($rawValue);
     }
 }

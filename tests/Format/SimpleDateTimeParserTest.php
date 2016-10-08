@@ -15,7 +15,7 @@ namespace Test\LitGroup\Time\Format;
 use LitGroup\Time\Format\DateTimeParser;
 use LitGroup\Time\Format\SimpleDateTimeParser;
 use LitGroup\Time\LocalDateTime;
-use LitGroup\Time\Location;
+use LitGroup\Time\TimeZone;
 use LitGroup\Time\ZonedDateTime;
 
 class SimpleDateTimeParserTest extends DateTimeParserTestCase
@@ -37,12 +37,12 @@ class SimpleDateTimeParserTest extends DateTimeParserTestCase
     public function getZonedParsingExamples(): array
     {
         return [
-            [Location::utc(), '0001-02-03 00:00:00', ZonedDateTime::of(Location::utc(), 1, 2, 3)],
-            [Location::utc(), '0001-02-03 04:05:06', ZonedDateTime::of(Location::utc(), 1, 2, 3, 4, 5, 6)],
-            [Location::utc(), '2016-11-24 19:37:14', ZonedDateTime::of(Location::utc(), 2016, 11, 24, 19, 37, 14)],
-            [Location::of('Europe/Moscow'), '0001-02-03 00:00:00', ZonedDateTime::of(Location::of('Europe/Moscow'), 1, 2, 3)],
-            [Location::of('Europe/Moscow'), '0001-02-03 04:05:06', ZonedDateTime::of(Location::of('Europe/Moscow'), 1, 2, 3, 4, 5, 6)],
-            [Location::of('Europe/Moscow'), '2016-11-24 19:37:14', ZonedDateTime::of(Location::of('Europe/Moscow'), 2016, 11, 24, 19, 37, 14)],
+            [TimeZone::utc(), '0001-02-03 00:00:00', ZonedDateTime::of(TimeZone::utc(), 1, 2, 3)],
+            [TimeZone::utc(), '0001-02-03 04:05:06', ZonedDateTime::of(TimeZone::utc(), 1, 2, 3, 4, 5, 6)],
+            [TimeZone::utc(), '2016-11-24 19:37:14', ZonedDateTime::of(TimeZone::utc(), 2016, 11, 24, 19, 37, 14)],
+            [TimeZone::of('Europe/Moscow'), '0001-02-03 00:00:00', ZonedDateTime::of(TimeZone::of('Europe/Moscow'), 1, 2, 3)],
+            [TimeZone::of('Europe/Moscow'), '0001-02-03 04:05:06', ZonedDateTime::of(TimeZone::of('Europe/Moscow'), 1, 2, 3, 4, 5, 6)],
+            [TimeZone::of('Europe/Moscow'), '2016-11-24 19:37:14', ZonedDateTime::of(TimeZone::of('Europe/Moscow'), 2016, 11, 24, 19, 37, 14)],
         ];
     }
 

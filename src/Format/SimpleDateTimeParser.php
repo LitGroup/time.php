@@ -15,7 +15,7 @@ namespace LitGroup\Time\Format;
 use LitGroup\Time\Exception\DateTimeException;
 use LitGroup\Time\Exception\FormatException;
 use LitGroup\Time\LocalDateTime;
-use LitGroup\Time\Location;
+use LitGroup\Time\TimeZone;
 use LitGroup\Time\ZonedDateTime;
 
 /**
@@ -52,10 +52,10 @@ class SimpleDateTimeParser implements DateTimeParser
         throw FormatException::invalidDateTimeFormat($str);
     }
 
-    public function parseZoned(Location $location, string $str): ZonedDateTime
+    public function parseZoned(TimeZone $timeZone, string $str): ZonedDateTime
     {
         $localDateTime = $this->parseLocal($str);
 
-        return ZonedDateTime::ofDateAndTime($location, $localDateTime->getDate(), $localDateTime->getTime());
+        return ZonedDateTime::ofDateAndTime($timeZone, $localDateTime->getDate(), $localDateTime->getTime());
     }
 }

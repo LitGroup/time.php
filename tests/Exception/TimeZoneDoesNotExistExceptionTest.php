@@ -13,25 +13,28 @@ declare(strict_types = 1);
 namespace Test\LitGroup\Time\Exception;
 
 use LitGroup\Time\Exception\DateTimeException;
-use LitGroup\Time\Exception\LocationDoesNotExistException;
-use LitGroup\Time\LocationId;
+use LitGroup\Time\Exception\TimeZoneDoesNotExistException;
+use LitGroup\Time\TimeZoneId;
 
-class LocationDoesNotExistExceptionTest extends \PHPUnit_Framework_TestCase
+class TimeZoneDoesNotExistExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    const LOCATION_ID = 'Non/Existent';
-    const MESSAGE = 'Location with id "Non/Existent" does not exist.';
+    const TIMEZONE_ID = 'Non/Existent';
+    const MESSAGE = 'Time zone with id "Non/Existent" does not exist.';
 
     /**
-     * @var LocationDoesNotExistException
+     * @var TimeZoneDoesNotExistException
      */
     private $exception;
 
-    private $locationId;
+    /**
+     * @var TimeZoneId
+     */
+    private $timeZoneId;
 
     protected function setUp()
     {
-        $this->locationId = new LocationId(self::LOCATION_ID);
-        $this->exception = new LocationDoesNotExistException($this->locationId);
+        $this->timeZoneId = new TimeZoneId(self::TIMEZONE_ID);
+        $this->exception = new TimeZoneDoesNotExistException($this->timeZoneId);
     }
 
     /**
@@ -54,18 +57,18 @@ class LocationDoesNotExistExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itHasAnIdOfLocationWhichCannotBeFound()
+    public function itHasAnIdOfTimeZoneWhichCannotBeFound()
     {
-        $this->assertSame($this->getLocationId(), $this->getException()->getIdOfSoughtLocation());
+        $this->assertSame($this->getTimeZoneId(), $this->getException()->getIdOfSoughtTimeZone());
     }
 
-    private function getException(): LocationDoesNotExistException
+    private function getException(): TimeZoneDoesNotExistException
     {
         return $this->exception;
     }
 
-    private function getLocationId(): LocationId
+    private function getTimeZoneId(): TimeZoneId
     {
-        return $this->locationId;
+        return $this->timeZoneId;
     }
 }
