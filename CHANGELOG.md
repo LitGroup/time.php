@@ -34,3 +34,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `Format\SimpleTimeParser` which parses `Time` from a string representation of formats: `HH:mm` and `HH:mm:ss`.
 - Added `Format\SimpleDateTimeParser` which parses date and time from a string representation of formats:
   `YYYY-MM-DD HH:mm:ss`.
+- Added `Clock`.  A clock providing access to the current date and time using a time-zone.
