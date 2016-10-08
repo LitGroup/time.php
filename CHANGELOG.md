@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## Unreleased
+## v0.1.0 - 2016-10-08
 ### Added
 - Added `Time` value object. It represents time in the ISO-8601 calendar
   system (without time-zone).
