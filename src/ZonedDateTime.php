@@ -65,6 +65,18 @@ final class ZonedDateTime implements DateTime, Equatable
         return new self($timeZone, $date, $time);
     }
 
+    public static function ofUtc(
+        int $year, int $month = 1, int $day = 1,
+        int $hour = 0, int $minute = 0, int $second = 0
+    ): ZonedDateTime {
+        return self::of(TimeZone::utc(), $year, $month, $day, $hour, $minute, $second);
+    }
+
+    public static function ofUtcDateAndTime(Date $date, Time $time): ZonedDateTime
+    {
+        return self::ofDateAndTime(TimeZone::utc(), $date, $time);
+    }
+
     public function getDate(): Date
     {
         return $this->date;
