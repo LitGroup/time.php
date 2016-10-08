@@ -250,6 +250,50 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodWithInitializationByDateAndTimeInUtcTimeZone()
+    {
+        $date = Date::of(self::YEAR, self::MONTH, self::DAY);
+        $time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
+
+        $dateTime = ZonedDateTime::ofUtcDateAndTime($date, $time);
+        $this->assertTrue(TimeZone::utc()->equals($dateTime->getTimeZone()));
+        $this->assertTrue($date->equals($dateTime->getDate()));
+        $this->assertTrue($time->equals($dateTime->getTime()));
+    }
+
+    /**
+     * @test
+     */
+    public function itHasAFactoryMethodWithInitializationByScalarValuesInUtcZone()
+    {
+        $dateTime = ZonedDateTime::ofUtc(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND);
+
+        $this->assertTrue($dateTime->getTimeZone()->equals(TimeZone::utc()));
+        $this->assertTrue($dateTime->equals(ZonedDateTime::of(
+            TimeZone::utc(),
+            self::YEAR, self::MONTH, self::DAY,
+            self::HOUR, self::MINUTE, self::SECOND
+        )));
+
+        $this->assertTrue(
+            ZonedDateTime::ofUtc(self::YEAR)
+                ->equals(
+                    ZonedDateTime::of(
+                        TimeZone::utc(),
+                        self::YEAR,
+                        self::DEFAULT_MONTH,
+                        self::DEFAULT_DAY,
+                        self::DEFAULT_HOUR,
+                        self::DEFAULT_MINUTE,
+                        self::DEFAULT_SECOND
+                    )
+                )
+        );
+    }
+
     private function getDateTime(): ZonedDateTime
     {
         return $this->dateTime;
