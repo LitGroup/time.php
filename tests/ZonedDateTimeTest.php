@@ -15,12 +15,12 @@ namespace Test\LitGroup\Time;
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Date;
 use LitGroup\Time\DateTime;
-use LitGroup\Time\Location;
-use LitGroup\Time\LocationId;
+use LitGroup\Time\TimeZone;
+use LitGroup\Time\TimeZoneId;
 use LitGroup\Time\Month;
 use LitGroup\Time\Time;
 use LitGroup\Time\Year;
-use LitGroup\Time\Zone;
+use LitGroup\Time\Offset;
 use LitGroup\Time\ZonedDateTime;
 
 class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
@@ -41,12 +41,12 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
 
     const TIMESTAMP = 1470269107;
 
-    const LOCATION = "Europe/Moscow";
-    const UTC_LOCATION = "UTC";
+    const TIMEZONE = "Europe/Moscow";
+    const UTC_TIMEZONE = "UTC";
 
-    const ZONE_ABBR = 'MSK';
-    const ZONE_OFFSET = 10800;
-    const ZONE_DST = false;
+    const OFFSET_ABBR = 'MSK';
+    const OFFSET_TOTAL_SECONDS = 10800;
+    const OFFSET_DST = false;
 
     /**
      * @var ZonedDateTime
@@ -54,9 +54,9 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     private $dateTime;
 
     /**
-     * @var Location
+     * @var TimeZone
      */
-    private $location;
+    private $timeZone;
 
     /**
      * @var Date
@@ -70,10 +70,10 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->location = Location::ofId(new LocationId(self::LOCATION));
+        $this->timeZone = TimeZone::ofId(new TimeZoneId(self::TIMEZONE));
         $this->date = new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
         $this->time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
-        $this->dateTime = ZonedDateTime::ofDateAndTime($this->location, $this->date, $this->time);
+        $this->dateTime = ZonedDateTime::ofDateAndTime($this->timeZone, $this->date, $this->time);
     }
 
     /**
@@ -88,11 +88,11 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itHasALocation()
+    public function itHasATimeZone()
     {
         $dateTime = $this->getDateTime();
-        $expectedLocation = $this->getLocation();
-        $this->assertTrue($expectedLocation->equals($dateTime->getLocation()));
+        $expectedTimeZone = $this->getTimeZone();
+        $this->assertTrue($expectedTimeZone->equals($dateTime->getTimeZone()));
     }
 
     /**
@@ -129,12 +129,12 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itHasATimeZone()
+    public function itHasAnOffset()
     {
         $dateTime = $this->getDateTime();
-        $expectedZone = new Zone(self::ZONE_ABBR, self::ZONE_OFFSET, self::ZONE_DST);
+        $expectedZone = new Offset(self::OFFSET_ABBR, self::OFFSET_TOTAL_SECONDS, self::OFFSET_DST);
 
-        $this->assertTrue($expectedZone->equals($dateTime->getZone()));
+        $this->assertTrue($expectedZone->equals($dateTime->getOffset()));
     }
 
     /**
@@ -154,7 +154,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 true,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR, self::MONTH, self::DAY),
                     Time::of(self::HOUR, self::MINUTE, self::SECOND)
                 )
@@ -162,7 +162,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 true,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::UTC_LOCATION),
+                    TimeZone::of(self::UTC_TIMEZONE),
                     Date::of(self::YEAR, self::MONTH, self::DAY),
                     Time::of(self::HOUR - 3, self::MINUTE, self::SECOND)
                 )
@@ -170,7 +170,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR, self::MONTH, self::DAY),
                     Time::of(self::HOUR, self::MINUTE, self::SECOND + 1)
                 )
@@ -178,7 +178,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR, self::MONTH, self::DAY),
                     Time::of(self::HOUR, self::MINUTE + 1, self::SECOND)
                 )
@@ -186,7 +186,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR, self::MONTH, self::DAY),
                     Time::of(self::HOUR + 1, self::MINUTE, self::SECOND)
                 )
@@ -194,7 +194,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR, self::MONTH, self::DAY + 1),
                     Time::of(self::HOUR, self::MINUTE, self::SECOND)
                 )
@@ -202,7 +202,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR, self::MONTH + 1, self::DAY),
                     Time::of(self::HOUR, self::MINUTE, self::SECOND)
                 )
@@ -210,7 +210,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 ZonedDateTime::ofDateAndTime(
-                    Location::of(self::LOCATION),
+                    TimeZone::of(self::TIMEZONE),
                     Date::of(self::YEAR + 1, self::MONTH, self::DAY),
                     Time::of(self::HOUR, self::MINUTE, self::SECOND)
                 )
@@ -228,17 +228,17 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     public function itHasAFactoryMethodWithInitializationByScalarValues()
     {
         $this->assertTrue(
-            ZonedDateTime::of($this->getLocation(), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)
+            ZonedDateTime::of($this->getTimeZone(), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)
                 ->equals(
                     $this->getDateTime()
                 )
         );
 
         $this->assertTrue(
-            ZonedDateTime::of($this->getLocation(), self::YEAR)
+            ZonedDateTime::of($this->getTimeZone(), self::YEAR)
                 ->equals(
                     ZonedDateTime::of(
-                        $this->getLocation(),
+                        $this->getTimeZone(),
                         self::YEAR,
                         self::DEFAULT_MONTH,
                         self::DEFAULT_DAY,
@@ -255,9 +255,9 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         return $this->dateTime;
     }
 
-    private function getLocation(): Location
+    private function getTimeZone(): TimeZone
     {
-        return $this->location;
+        return $this->timeZone;
     }
 
     private function getDate(): Date

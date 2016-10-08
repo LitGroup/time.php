@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace LitGroup\Time\Format;
 
 use LitGroup\Time\LocalDateTime;
-use LitGroup\Time\Location;
+use LitGroup\Time\TimeZone;
 use LitGroup\Time\ZonedDateTime;
 use LitGroup\Time\Exception\FormatException;
 
@@ -38,5 +38,5 @@ interface DateTimeParser
      *
      * @throws FormatException
      */
-    public function parseZoned(Location $location, string $str): ZonedDateTime;
+    public function parseZoned(TimeZone $timeZone, string $str): ZonedDateTime;
 }

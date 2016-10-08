@@ -12,10 +12,9 @@ declare(strict_types = 1);
 
 namespace Test\LitGroup\Time\Format;
 
-use LitGroup\Time\DateTime;
 use LitGroup\Time\Format\DateTimeParser;
 use LitGroup\Time\LocalDateTime;
-use LitGroup\Time\Location;
+use LitGroup\Time\TimeZone;
 use LitGroup\Time\ZonedDateTime;
 
 abstract class DateTimeParserTestCase extends \PHPUnit_Framework_TestCase
@@ -68,12 +67,12 @@ abstract class DateTimeParserTestCase extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider getZonedParsingExamples
      */
-    final public function itParsesZonedDateAndTimeFromString(Location $location, string $string, ZonedDateTime $dateTime)
+    final public function itParsesZonedDateAndTimeFromString(TimeZone $timeZone, string $string, ZonedDateTime $dateTime)
     {
-        $parsed = $this->getParser()->parseZoned($location, $string);
+        $parsed = $this->getParser()->parseZoned($timeZone, $string);
 
         $this->assertTrue($dateTime->equals($parsed));
-        $this->assertTrue($location->equals($parsed->getLocation()));
+        $this->assertTrue($timeZone->equals($parsed->getTimeZone()));
     }
 
     /**
@@ -83,7 +82,7 @@ abstract class DateTimeParserTestCase extends \PHPUnit_Framework_TestCase
      */
     final public function itThrowsAnExceptionWhenStringHasInvalidFormatDuringParsingOfZonedDateAndTime(string $string)
     {
-        $this->getParser()->parseZoned(Location::utc(), $string);
+        $this->getParser()->parseZoned(TimeZone::utc(), $string);
     }
 
     final protected function getParser(): DateTimeParser

@@ -15,7 +15,7 @@ namespace Test\LitGroup\Time\Format;
 use LitGroup\Time\Format\DateTimeFormatter;
 use LitGroup\Time\Format\SimpleDateTimeFormatter;
 use LitGroup\Time\LocalDateTime;
-use LitGroup\Time\Location;
+use LitGroup\Time\TimeZone;
 use LitGroup\Time\ZonedDateTime;
 
 class SimpleDateTimeFormatterTest extends DateTimeFormatterTestCase
@@ -36,10 +36,10 @@ class SimpleDateTimeFormatterTest extends DateTimeFormatterTestCase
     public function getZonedFormattingExamples(): array
     {
         return [
-            [ZonedDateTime::of(Location::utc(), 1, 2, 3, 4, 5, 6), '0001-02-03 04:05:06'],
-            [ZonedDateTime::of(Location::utc(), 2016, 12, 31, 23, 59, 45), '2016-12-31 23:59:45'],
-            [ZonedDateTime::of(Location::of('Europe/Moscow'), 1, 2, 3, 4, 5, 6), '0001-02-03 04:05:06'],
-            [ZonedDateTime::of(Location::of('Europe/Moscow'), 2016, 12, 31, 23, 59, 45), '2016-12-31 23:59:45'],
+            [ZonedDateTime::of(TimeZone::utc(), 1, 2, 3, 4, 5, 6), '0001-02-03 04:05:06'],
+            [ZonedDateTime::of(TimeZone::utc(), 2016, 12, 31, 23, 59, 45), '2016-12-31 23:59:45'],
+            [ZonedDateTime::of(TimeZone::of('Europe/Moscow'), 1, 2, 3, 4, 5, 6), '0001-02-03 04:05:06'],
+            [ZonedDateTime::of(TimeZone::of('Europe/Moscow'), 2016, 12, 31, 23, 59, 45), '2016-12-31 23:59:45'],
         ];
     }
 }

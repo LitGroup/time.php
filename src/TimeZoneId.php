@@ -15,11 +15,11 @@ namespace LitGroup\Time;
 use LitGroup\Equatable\Equatable;
 
 /**
- * Identifier of zone-related location. For example: Europe/Moscow.
+ * Identifier of time zone. For example: Europe/Moscow.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class LocationId implements Equatable
+final class TimeZoneId implements Equatable
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ final class LocationId implements Equatable
     public function __construct(string $rawValue)
     {
         if (strlen(trim($rawValue)) === 0) {
-            throw new \InvalidArgumentException('Raw value of LocationId cannot be empty.');
+            throw new \InvalidArgumentException('Raw value of TimeZoneId cannot be empty.');
         }
 
         $this->rawValue = $rawValue;
@@ -43,7 +43,7 @@ final class LocationId implements Equatable
     public function equals(Equatable $another): bool
     {
         return
-            $another instanceof LocationId &&
+            $another instanceof TimeZoneId &&
             $another->getRawValue() === $this->getRawValue();
     }
 
