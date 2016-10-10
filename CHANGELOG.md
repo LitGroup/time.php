@@ -6,7 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 ### Added
-- Added shortcut factory `ZonedDateTime::nowOnClock()`.
 - Added shortcut factory `ZonedDateTime::nowUtc()` which returns current time in the UTC timezone.
 
 ## v0.1.0 - 2016-10-08

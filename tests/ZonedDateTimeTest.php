@@ -297,17 +297,6 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     */
-    public function itHasAFactoryForInitializationByCurrentTimeOnCLock()
-    {
-        $clock = $this->createMock(Clock::class);
-        $clock->method('now')->willReturn($this->getDateTime());
-
-        $this->assertSame($this->getDateTime(), ZonedDateTime::nowOnClock($clock));
-    }
-
-    /**
-     * @test
      * @small
      */
     public function itHasAFactoryForInitializationByCurrentDateAndTimeInUtc()
