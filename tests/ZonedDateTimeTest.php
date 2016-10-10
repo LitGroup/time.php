@@ -306,6 +306,18 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->getDateTime(), ZonedDateTime::nowOnClock($clock));
     }
 
+    /**
+     * @test
+     * @small
+     */
+    public function itHasAFactoryForInitializationByCurrentDateAndTimeInUtc()
+    {
+        $dateTime = ZonedDateTime::nowUtc();
+        $this->assertInstanceOf(ZonedDateTime::class, $dateTime);
+        $this->assertEquals(time(), $dateTime->getSecondsSinceEpoch(), 'Should be equal to the current timestamp', 1.0);
+        $this->assertTrue(TimeZone::utc()->equals($dateTime->getTimeZone()));
+    }
+
     private function getDateTime(): ZonedDateTime
     {
         return $this->dateTime;

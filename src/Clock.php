@@ -24,6 +24,11 @@ use LitGroup\Equatable\Equatable;
 class Clock implements Equatable
 {
     /**
+     * @var Clock
+     */
+    private static $utcClock;
+
+    /**
      * @var TimeZone
      */
     private $timeZone;
@@ -40,7 +45,10 @@ class Clock implements Equatable
 
     public static function withUtcTimeZone(): Clock
     {
-        return self::withTimeZone(TimeZone::utc());
+        if (self::$utcClock === null) {
+            self::$utcClock = self::withTimeZone(TimeZone::utc());
+        }
+        return self::$utcClock;
     }
 
     public function getTimeZone(): TimeZone
