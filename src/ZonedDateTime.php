@@ -77,6 +77,11 @@ final class ZonedDateTime implements DateTime, Equatable
         return self::ofDateAndTime(TimeZone::utc(), $date, $time);
     }
 
+    public static function nowOnClock(Clock $clock): ZonedDateTime
+    {
+        return $clock->now();
+    }
+
     public function getDate(): Date
     {
         return $this->date;

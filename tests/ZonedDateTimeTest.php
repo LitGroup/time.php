@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace Test\LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
+use LitGroup\Time\Clock;
 use LitGroup\Time\Date;
 use LitGroup\Time\DateTime;
 use LitGroup\Time\TimeZone;
@@ -292,6 +293,17 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
                     )
                 )
         );
+    }
+
+    /**
+     * @test
+     */
+    public function itHasAFactoryForInitializationByCurrentTimeOnCLock()
+    {
+        $clock = $this->createMock(Clock::class);
+        $clock->method('now')->willReturn($this->getDateTime());
+
+        $this->assertSame($this->getDateTime(), ZonedDateTime::nowOnClock($clock));
     }
 
     private function getDateTime(): ZonedDateTime
