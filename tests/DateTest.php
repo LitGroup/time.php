@@ -154,6 +154,33 @@ class DateTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     * @dataProvider getComparisonExamples
+     */
+    public function itIsComparable(int $result, Date $another)
+    {
+        $date = $this->getDate();
+        $this->assertSame($result, $date->compare($another));
+        $this->assertSame($result > 0, $date->greaterThan($another));
+        $this->assertSame($result >= 0, $date->greaterThanOrEqual($another));
+        $this->assertSame($result < 0, $date->lessThan($another));
+        $this->assertSame($result <= 0, $date->lessThanOrEqual($another));
+    }
+
+    public function getComparisonExamples(): array
+    {
+        return [
+            [ 0, Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH)],
+            [ 1, Date::of(self::YEAR - 1, self::MONTH, self::DAY_OF_MONTH)],
+            [ 1, Date::of(self::YEAR, self::MONTH - 1, self::DAY_OF_MONTH)],
+            [ 1, Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH - 1)],
+            [-1, Date::of(self::YEAR + 1, self::MONTH, self::DAY_OF_MONTH)],
+            [-1, Date::of(self::YEAR, self::MONTH + 1, self::DAY_OF_MONTH)],
+            [-1, Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH + 1)],
+        ];
+    }
+
     private function getDate(): Date
     {
         return $this->date;

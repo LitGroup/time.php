@@ -66,4 +66,33 @@ final class LocalDateTime implements DateTime, Equatable
             $another->getDate()->equals($this->getDate()) &&
             $another->getTime()->equals($this->getTime());
     }
+
+    public function compare(LocalDateTime $another): int
+    {
+        if (!$this->getDate()->equals($another->getDate())) {
+            return $this->getDate()->compare($another->getDate());
+        } else {
+            return $this->getTime()->compare($another->getTime());
+        }
+    }
+
+    public function greaterThan(LocalDateTime $another): bool
+    {
+        return $this->compare($another) > 0;
+    }
+
+    public function greaterThanOrEqual(LocalDateTime $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(LocalDateTime $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual(LocalDateTime $another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
 }

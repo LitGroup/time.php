@@ -154,6 +154,33 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     * @dataProvider getComparisonExamples
+     */
+    public function itIsComparable(int $result, Time $another)
+    {
+        $time = $this->createTime();
+        $this->assertSame($result, $time->compare($another));
+        $this->assertSame($result > 0, $time->greaterThan($another));
+        $this->assertSame($result >= 0, $time->greaterThanOrEqual($another));
+        $this->assertSame($result < 0, $time->lessThan($another));
+        $this->assertSame($result <= 0, $time->lessThanOrEqual($another));
+    }
+
+    public function getComparisonExamples(): array
+    {
+        return [
+            [0,  $this->createTime(self::HOUR, self::MINUTE, self::SECOND)],
+            [1,  $this->createTime(self::HOUR - 1, self::MINUTE, self::SECOND)],
+            [1,  $this->createTime(self::HOUR, self::MINUTE - 1, self::SECOND)],
+            [1,  $this->createTime(self::HOUR, self::MINUTE, self::SECOND - 1)],
+            [-1,  $this->createTime(self::HOUR + 1, self::MINUTE, self::SECOND)],
+            [-1,  $this->createTime(self::HOUR, self::MINUTE + 1, self::SECOND)],
+            [-1,  $this->createTime(self::HOUR, self::MINUTE, self::SECOND + 1)],
+        ];
+    }
+
     private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
     {
         return Time::of($hour, $minute, $second);

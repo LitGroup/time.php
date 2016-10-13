@@ -122,6 +122,31 @@ final class ZonedDateTime implements DateTime, Equatable
             $another->getSecondsSinceEpoch() === $this->getSecondsSinceEpoch();
     }
 
+    public function compare(ZonedDateTime $another): int
+    {
+        return $this->getSecondsSinceEpoch() <=> $another->getSecondsSinceEpoch();
+    }
+
+    public function greaterThan(ZonedDateTime $another): bool
+    {
+        return $this->compare($another) > 0;
+    }
+
+    public function greaterThanOrEqual(ZonedDateTime $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(ZonedDateTime $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual($another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
+
     private function __construct(TimeZone $timeZone, Date $date, Time $time)
     {
         $this->timeZone = $timeZone;

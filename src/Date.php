@@ -87,4 +87,35 @@ final class Date implements Equatable
             $another->getMonth()->equals($this->getMonth()) &&
             $another->getDayOfMonth() === $this->getDayOfMonth();
     }
+
+    public function compare(Date $another): int
+    {
+        if (!$this->getYear()->equals($another->getYear())) {
+            return $this->getYear()->compare($another->getYear());
+        } elseif (!$this->getMonth()->equals($another->getMonth())) {
+            return $this->getMonth()->compare($another->getMonth());
+        } else {
+            return $this->getDayOfMonth() <=> $another->getDayOfMonth();
+        }
+    }
+
+    public function greaterThan(Date $another): bool
+    {
+        return $this->compare($another) > 0;
+    }
+
+    public function greaterThanOrEqual(Date $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(Date $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual(Date $another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
 }

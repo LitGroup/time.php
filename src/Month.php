@@ -87,4 +87,29 @@ final class Month extends Enumerable
     {
         return self::createEnum(12);
     }
+
+    public function compare(Month $another): int
+    {
+        return $this->getRawValue() <=> $another->getRawValue();
+    }
+
+    public function greaterThan(Month $another): bool
+    {
+        return $this->compare($another) > 0;
+    }
+
+    public function greaterThanOrEqual(Month $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(Month $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual(Month $another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
 }

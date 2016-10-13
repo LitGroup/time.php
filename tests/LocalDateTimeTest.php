@@ -70,6 +70,27 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function itHasAFactoryMethodForInitializationByScalarValues()
+    {
+        $this->assertTrue(
+            LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)->equals(
+                $this->getDateTime()
+            )
+        );
+
+        $this->assertTrue(
+            LocalDateTime::of(self::YEAR)->equals(
+                LocalDateTime::of(
+                    self::YEAR, self::DEFAULT_MONTH, self::DEFAULT_DAY,
+                    self::DEFAULT_HOUR, self::DEFAULT_MINUTE, self::DEFAULT_SECOND
+                )
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
     public function itHasADate()
     {
         $dateTime = $this->getDateTime();
@@ -144,23 +165,35 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider getComparisonExamples
      */
-    public function itHasAFactoryMethodForInitializationByScalarValues()
+    public function itIsComparable(int $result, LocalDateTime $another)
     {
-        $this->assertTrue(
-            LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)->equals(
-                $this->getDateTime()
-            )
-        );
+        $dateTime = $this->getDateTime();
+        $this->assertSame($result, $dateTime->compare($another));
+        $this->assertSame($result > 0, $dateTime->greaterThan($another));
+        $this->assertSame($result >= 0, $dateTime->greaterThanOrEqual($another));
+        $this->assertSame($result < 0, $dateTime->lessThan($another));
+        $this->assertSame($result <= 0, $dateTime->lessThanOrEqual($another));
+    }
 
-        $this->assertTrue(
-            LocalDateTime::of(self::YEAR)->equals(
-                LocalDateTime::of(
-                    self::YEAR, self::DEFAULT_MONTH, self::DEFAULT_DAY,
-                    self::DEFAULT_HOUR, self::DEFAULT_MINUTE, self::DEFAULT_SECOND
-                )
-            )
-        );
+    public function getComparisonExamples(): array
+    {
+        return [
+            [ 0, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, LocalDateTime::of(self::YEAR - 1, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, LocalDateTime::of(self::YEAR, self::MONTH - 1, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY - 1, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR - 1, self::MINUTE, self::SECOND)],
+            [ 1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE - 1, self::SECOND)],
+            [ 1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND - 1)],
+            [-1, LocalDateTime::of(self::YEAR + 1, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [-1, LocalDateTime::of(self::YEAR, self::MONTH + 1, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [-1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY + 1, self::HOUR, self::MINUTE, self::SECOND)],
+            [-1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR + 1, self::MINUTE, self::SECOND)],
+            [-1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE + 1, self::SECOND)],
+            [-1, LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND + 1)],
+        ];
     }
 
     private function getDateTime(): LocalDateTime

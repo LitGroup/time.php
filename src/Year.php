@@ -49,15 +49,33 @@ final class Year implements Equatable
             $another->getRawValue() === $this->getRawValue();
     }
 
-    private function __construct(int $value)
+    public function compare(Year $another): int
     {
-        $this->setValue($value);
+        return $this->getRawValue() <=> $another->getRawValue();
     }
 
-    private function setValue(int $value)
+    public function greaterThan(Year $another): bool
     {
-        assert($this->rawValue === null, 'Cannot be initialized twice.');
+        return $this->compare($another) > 0;
+    }
 
+    public function greaterThanOrEqual(Year $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(Year $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual(Year $another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
+
+    private function __construct(int $value)
+    {
         if ($value < self::MIN_VALUE || $value > self::MAX_VALUE) {
             throw new DateTimeException(sprintf(
                 'Year cannot be less than %d or greater than %d, but %d given.',
