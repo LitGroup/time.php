@@ -37,4 +37,26 @@ class MonthTest extends EnumerableTestCase
             12 => Month::december(),
         ]);
     }
+
+    /**
+     * @test
+     * @dataProvider getComparisonExamples
+     */
+    public function itIsComparable(int $result, Month $one, Month $another)
+    {
+        $this->assertSame($result, $one->compare($another));
+        $this->assertSame($result > 0, $one->greaterThan($another));
+        $this->assertSame($result >= 0, $one->greaterThanOrEqual($another));
+        $this->assertSame($result < 0, $one->lessThan($another));
+        $this->assertSame($result <= 0, $one->lessThanOrEqual($another));
+    }
+
+    public function getComparisonExamples(): array
+    {
+        return [
+            [0, Month::january(), Month::january()],
+            [1, Month::march(), Month::february()],
+            [-1, Month::march(), Month::april()],
+        ];
+    }
 }
