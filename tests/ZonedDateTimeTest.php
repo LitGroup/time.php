@@ -27,12 +27,12 @@ use LitGroup\Time\ZonedDateTime;
 class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
 {
     const YEAR = 2016;
-    const MONTH = 8;
-    const DAY = 4;
+    const MONTH = 4;
+    const DAY = 5;
 
-    const HOUR = 3;
-    const MINUTE = 5;
-    const SECOND = 7;
+    const HOUR = 6;
+    const MINUTE = 8;
+    const SECOND = 10;
 
     const DEFAULT_MONTH = 1;
     const DEFAULT_DAY = 1;
@@ -40,7 +40,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_MINUTE = 0;
     const DEFAULT_SECOND = 0;
 
-    const TIMESTAMP = 1470269107;
+    const TIMESTAMP = 1459825690;
 
     const TIMEZONE = "Europe/Moscow";
     const UTC_TIMEZONE = "UTC";
@@ -319,6 +319,52 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ZonedDateTime::class, $dateTime);
         $this->assertEquals(time(), $dateTime->getSecondsSinceEpoch(), 'Should be equal to the current timestamp', 1.0);
         $this->assertTrue(TimeZone::utc()->equals($dateTime->getTimeZone()));
+    }
+
+    /**
+     * @test
+     * @dataProvider getComparisonExamples
+     */
+    public function itIsComparable(int $result, ZonedDateTime $another)
+    {
+        $dateTime = $this->getDateTime();
+        $this->assertSame($result, $dateTime->compare($another));
+        $this->assertSame($result > 0, $dateTime->greaterThan($another));
+        $this->assertSame($result >= 0, $dateTime->greaterThanOrEqual($another));
+        $this->assertSame($result < 0, $dateTime->lessThan($another));
+        $this->assertSame($result <= 0, $dateTime->lessThanOrEqual($another));
+    }
+
+    public function getComparisonExamples(): array
+    {
+        return [
+            [ 0, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR - 1, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH - 1, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY - 1, self::HOUR, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 1, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE - 1, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND - 1)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR + 1, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH + 1, self::DAY, self::HOUR, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY + 1, self::HOUR, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR + 1, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE + 1, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND + 1)],
+            [ 0, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR - 1, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH - 1, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY - 1, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 4, self::MINUTE, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE - 1, self::SECOND)],
+            [ 1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND - 1)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR + 1, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH + 1, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY + 1, self::HOUR - 3, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 2, self::MINUTE, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE + 1, self::SECOND)],
+            [-1, ZonedDateTime::of(TimeZone::of(self::UTC_TIMEZONE), self::YEAR, self::MONTH, self::DAY, self::HOUR - 3, self::MINUTE, self::SECOND + 1)],
+        ];
     }
 
     private function getDateTime(): ZonedDateTime
