@@ -49,6 +49,31 @@ final class Year implements Equatable
             $another->getRawValue() === $this->getRawValue();
     }
 
+    public function compare(Year $another): int
+    {
+        return $this->getRawValue() <=> $another->getRawValue();
+    }
+
+    public function greaterThan(Year $another): bool
+    {
+        return $this->compare($another) > 0;
+    }
+
+    public function greaterThanOrEqual(Year $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(Year $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual(Year $another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
+
     private function __construct(int $value)
     {
         $this->setValue($value);

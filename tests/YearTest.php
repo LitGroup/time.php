@@ -66,6 +66,29 @@ class YearTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     * @dataProvider getComparisonExamples
+     */
+    public function itIsComparable(int $result, Year $another)
+    {
+        $year = $this->createYear();
+        $this->assertSame($result, $year->compare($another));
+        $this->assertSame($result > 0, $year->greaterThan($another));
+        $this->assertSame($result >= 0, $year->greaterThanOrEqual($another));
+        $this->assertSame($result < 0, $year->lessThan($another));
+        $this->assertSame($result <= 0, $year->lessThanOrEqual($another));
+    }
+
+    public function getComparisonExamples(): array
+    {
+        return [
+            [ 0, $this->createYear(self::RAW_VALUE)],
+            [ 1, $this->createYear(self::RAW_VALUE - 1)],
+            [-1, $this->createYear(self::RAW_VALUE + 1)],
+        ];
+    }
+
     private function createYear(int $value = self::RAW_VALUE): Year
     {
         return Year::of($value);
