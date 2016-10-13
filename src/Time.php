@@ -76,6 +76,37 @@ final class Time implements Equatable
             $another->getSecond() === $this->getSecond();
     }
 
+    public function compare(Time $another): int
+    {
+        if ($this->getHour() !== $another->getHour()) {
+            return $this->getHour() <=> $another->getHour();
+        } elseif ($this->getMinute() !== $another->getMinute()) {
+            return $this->getMinute() <=> $another->getMinute();
+        } else {
+            return $this->getSecond() <=> $another->getSecond();
+        }
+    }
+
+    public function greaterThan(Time $another): bool
+    {
+        return $this->compare($another) > 0;
+    }
+
+    public function greaterThanOrEqual(Time $another): bool
+    {
+        return $this->compare($another) >= 0;
+    }
+
+    public function lessThan(Time $another): bool
+    {
+        return $this->compare($another) < 0;
+    }
+
+    public function lessThanOrEqual(Time $another): bool
+    {
+        return $this->compare($another) <= 0;
+    }
+
     private function __construct(int $hour, int $minute, int $second)
     {
         if ($hour < 0 || $hour > 23) {
