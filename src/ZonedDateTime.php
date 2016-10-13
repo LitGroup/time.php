@@ -107,6 +107,14 @@ final class ZonedDateTime implements DateTime, Equatable
         return $this->getNativeDateTime()->getTimestamp();
     }
 
+    /**
+     * Checks whether a ZonedDateTime has the same TimeZone as this.
+     */
+    public function isSameTimeZone(ZonedDateTime $another): bool
+    {
+        return $this->getTimeZone()->equals($another->getTimeZone());
+    }
+
     public function equals(Equatable $another): bool
     {
         return

@@ -44,6 +44,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
 
     const TIMEZONE = "Europe/Moscow";
     const UTC_TIMEZONE = "UTC";
+    const ANOTHER_TIMEZONE = 'Europe/Paris';
 
     const OFFSET_ABBR = 'MSK';
     const OFFSET_TOTAL_SECONDS = 10800;
@@ -221,6 +222,19 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
                 $this->createMock(Equatable::class)
             ]
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function itTestsEqualityOfTimeZone()
+    {
+        $a = ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR);
+        $b = ZonedDateTime::of(TimeZone::of(self::TIMEZONE), self::YEAR);
+        $c = ZonedDateTime::of(TimeZone::of(self::ANOTHER_TIMEZONE), self::YEAR);
+
+        $this->assertTrue($a->isSameTimeZone($b));
+        $this->assertFalse($a->isSameTimeZone($c));
     }
 
     /**
