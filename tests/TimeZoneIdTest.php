@@ -76,6 +76,21 @@ class TimeZoneIdTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $id = $this->createTimeZoneId();
+        $this->assertInstanceOf(\Serializable::class, $id);
+
+        $serialized = \serialize($id);
+        $this->assertTrue(
+            $this->createTimeZoneId()
+                ->equals(\unserialize($serialized))
+        );
+    }
+
     private function createTimeZoneId(string $rawValue = self::RAW_VALUE): TimeZoneId
     {
         return new TimeZoneId($rawValue);
