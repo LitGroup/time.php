@@ -181,6 +181,18 @@ class TimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $time = $this->createTime();
+        $this->assertInstanceOf(\Serializable::class, $time);
+
+        $serialized = serialize($time);
+        $this->assertTrue($time->equals(unserialize($serialized)));
+    }
+
     private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
     {
         return Time::of($hour, $minute, $second);
