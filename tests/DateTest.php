@@ -181,6 +181,14 @@ class DateTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $this->markTestIncomplete();
+    }
+
     private function getDate(): Date
     {
         return $this->date;
