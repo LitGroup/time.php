@@ -14,13 +14,14 @@ namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 use DateTimeZone as NativeTimeZone;
+use Serializable;
 
 /**
  * Time zone (ISO-8601).
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class TimeZone implements Equatable
+final class TimeZone implements Equatable, Serializable
 {
     /**
      * @var TimeZone
@@ -75,13 +76,30 @@ final class TimeZone implements Equatable
         return $this->getId()->getRawValue();
     }
 
+    public function serialize()
+    {
+        return \serialize($this->getId());
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->init(\unserialize($serialized));
+    }
+
     private function __construct(TimeZoneId $id)
     {
-        $this->id = $id;
+        $this->init($id);
     }
 
     private function getNativeTimeZone(): NativeTimeZone
     {
         return new NativeTimeZone($this->getId()->getRawValue());
+    }
+
+    private function init(TimeZoneId $id)
+    {
+        assert($this->id === null);
+
+        $this->id = $id;
     }
 }
