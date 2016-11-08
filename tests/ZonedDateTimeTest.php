@@ -339,6 +339,23 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $dateTime = $this->createDateTime();
+        $this->assertInstanceOf(\Serializable::class, $dateTime);
+
+        $unserialized = \unserialize(serialize($dateTime));
+        $this->assertTrue(
+            $this->createDateTime()->equals($unserialized)
+        );
+        $this->assertTrue(
+            $this->createDateTime()->isSameTimeZone($unserialized)
+        );
+    }
+
     private function createDateTime(TimeZone $tz = null, Date $date = null, Time $time = null): ZonedDateTime
     {
         return ZonedDateTime::ofDateAndTime(
