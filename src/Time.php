@@ -14,6 +14,7 @@ namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
+use Serializable;
 
 /**
  * A time without a time-zone in the ISO-8601 calendar system, such as 10:15:3.
@@ -30,7 +31,7 @@ use LitGroup\Time\Exception\DateTimeException;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class Time implements Equatable
+final class Time implements Equatable, Serializable
 {
     /**
      * @var int
@@ -107,8 +108,28 @@ final class Time implements Equatable
         return $this->compare($another) <= 0;
     }
 
+    public function serialize()
+    {
+        return \serialize([$this->getHour(), $this->getMinute(), $this->getSecond()]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list ($hour, $minute, $second) = \unserialize($serialized);
+        $this->init($hour, $minute, $second);
+    }
+
     private function __construct(int $hour, int $minute, int $second)
     {
+        $this->init($hour, $minute, $second);
+    }
+
+    private function init(int $hour, int $minute, int $second)
+    {
+        assert($this->hour === null);
+        assert($this->minute === null);
+        assert($this->second === null);
+
         if ($hour < 0 || $hour > 23) {
             throw new DateTimeException("Hour has an invalid value: $hour");
         }

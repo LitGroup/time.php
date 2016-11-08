@@ -13,13 +13,14 @@ declare(strict_types = 1);
 namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
+use Serializable;
 
 /**
  * Identifier of time zone. For example: Europe/Moscow.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class TimeZoneId implements Equatable
+final class TimeZoneId implements Equatable, Serializable
 {
     /**
      * @var string
@@ -28,11 +29,7 @@ final class TimeZoneId implements Equatable
 
     public function __construct(string $rawValue)
     {
-        if (strlen(trim($rawValue)) === 0) {
-            throw new \InvalidArgumentException('Raw value of TimeZoneId cannot be empty.');
-        }
-
-        $this->rawValue = $rawValue;
+        $this->init($rawValue);
     }
 
     public function getRawValue(): string
@@ -47,9 +44,27 @@ final class TimeZoneId implements Equatable
             $another->getRawValue() === $this->getRawValue();
     }
 
-
     public function __toString(): string
     {
         return $this->getRawValue();
+    }
+
+    public function serialize()
+    {
+        return \serialize($this->getRawValue());
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->init(\unserialize($serialized));
+    }
+
+    private function init(string $rawValue)
+    {
+        if (strlen(trim($rawValue)) === 0) {
+            throw new \InvalidArgumentException('Raw value of TimeZoneId cannot be empty.');
+        }
+
+        $this->rawValue = $rawValue;
     }
 }

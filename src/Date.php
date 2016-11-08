@@ -14,6 +14,7 @@ namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
+use Serializable;
 
 /**
  * A date without a time-zone in the ISO-8601 calendar system, such as 2007-12-03.
@@ -26,7 +27,7 @@ use LitGroup\Time\Exception\DateTimeException;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class Date implements Equatable
+final class Date implements Equatable, Serializable
 {
     /**
      * @var Year
@@ -54,14 +55,7 @@ final class Date implements Equatable
 
     public function __construct(Year $year, Month $month, int $dayOfMonth)
     {
-        $this->year = $year;
-        $this->month = $month;
-
-        if (!checkdate((int) $month->getRawValue(), $dayOfMonth, $year->getRawValue())) {
-            throw new DateTimeException(sprintf(
-                'Invalid date (Y/m/d):', $year->getRawValue(), $month->getRawValue(), $dayOfMonth));
-        }
-        $this->dayOfMonth = $dayOfMonth;
+        $this->init($year, $month, $dayOfMonth);
     }
 
     public function getYear(): Year
@@ -117,5 +111,36 @@ final class Date implements Equatable
     public function lessThanOrEqual(Date $another): bool
     {
         return $this->compare($another) <= 0;
+    }
+
+    public function serialize()
+    {
+        return \serialize([
+            $this->getYear(),
+            $this->getMonth()->getRawValue(),
+            $this->getDayOfMonth()
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list ($year, $monthNumber, $dayOfMonth) = \unserialize($serialized);
+        $this->init($year, Month::getValueOf($monthNumber), $dayOfMonth);
+    }
+
+    private function init(Year $year, Month $month, int $dayOfMonth)
+    {
+        assert($this->year === null);
+        assert($this->month === null);
+        assert($this->dayOfMonth === null);
+
+        $this->year = $year;
+        $this->month = $month;
+
+        if (!checkdate((int) $month->getRawValue(), $dayOfMonth, $year->getRawValue())) {
+            throw new DateTimeException(sprintf(
+                'Invalid date (Y/m/d):', $year->getRawValue(), $month->getRawValue(), $dayOfMonth));
+        }
+        $this->dayOfMonth = $dayOfMonth;
     }
 }

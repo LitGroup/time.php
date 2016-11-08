@@ -89,6 +89,18 @@ class YearTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $year = $this->createYear();
+        $this->assertInstanceOf(\Serializable::class, $year);
+
+        $serialized = serialize($year);
+        $this->assertTrue($year->equals(unserialize($serialized)));
+    }
+
     private function createYear(int $value = self::RAW_VALUE): Year
     {
         return Year::of($value);

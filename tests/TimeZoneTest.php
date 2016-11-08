@@ -13,14 +13,9 @@ declare(strict_types = 1);
 namespace Test\LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
-use LitGroup\Time\Date;
 use LitGroup\Time\TimeZone;
 use LitGroup\Time\TimeZoneId;
-use LitGroup\Time\Month;
-use LitGroup\Time\Time;
-use LitGroup\Time\Year;
 use LitGroup\Time\Offset;
-use LitGroup\Time\ZonedDateTime;
 
 class TimeZoneTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,27 +29,15 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
     const TIMESTAMP = 1470269107;
 
     /**
-     * @var TimeZone
-     */
-    private $timeZone;
-
-    /**
-     * @var TimeZoneId
-     */
-    private $timeZoneId;
-
-    protected function setUp()
-    {
-        $this->timeZoneId = new TimeZoneId(self::ID);
-        $this->timeZone = TimeZone::ofId($this->timeZoneId);
-    }
-
-    /**
      * @test
      */
     public function itHasAnId()
     {
-        $this->assertSame($this->getTimeZoneId(), $this->getTimeZone()->getId());
+        $this->assertTrue(
+            $this->createTimeZoneId()->equals(
+                $this->createTimeZone()->getId()
+            )
+        );
     }
 
     /**
@@ -62,7 +45,7 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
      */
     public function itCanBeConvertedToString()
     {
-        $this->assertSame(self::ID, (string) $this->getTimeZone());
+        $this->assertSame(self::ID, (string) $this->createTimeZone());
     }
 
     /**
@@ -71,7 +54,7 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
     {
-        $timeZone = $this->getTimeZone();
+        $timeZone = $this->createTimeZone();
         $this->assertInstanceOf(Equatable::class, $timeZone);
         $this->assertSame($equal, $timeZone->equals($another));
     }
@@ -79,8 +62,8 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
     public function getEqualityExamples(): array
     {
         return [
-            [true, TimeZone::ofId(new TimeZoneId(self::ID))],
-            [false, TimeZone::ofId(new TimeZoneId(self::ANOTHER_ID))],
+            [true, $this->createTimeZone(self::ID)],
+            [false, $this->createTimeZone(self::ANOTHER_ID)],
             [false, $this->createMock(Equatable::class)],
         ];
     }
@@ -90,7 +73,7 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
      */
     public function itProvidesAnOffset()
     {
-        $timeZone = $this->getTimeZone();
+        $timeZone = $this->createTimeZone();
         $expectedZone = new Offset(self::OFFSET_ABBR, self::OFFSET_SECONDS, self::OFFSET_DST);
 
         $this->assertTrue($expectedZone->equals($timeZone->getOffsetAt(self::TIMESTAMP)));
@@ -102,7 +85,7 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
     public function itHasAFactoryMethodWithInitializationByRawId()
     {
         $this->assertTrue(
-            $this->getTimeZone()->equals(TimeZone::of(self::ID))
+            $this->createTimeZone()->equals(TimeZone::of(self::ID))
         );
     }
 
@@ -117,13 +100,30 @@ class TimeZoneTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(TimeZone::of('UTC')->equals($timeZone));
     }
 
-    private function getTimeZone(): TimeZone
+    /**
+     * @test
+     */
+    public function itIsSerializable()
     {
-        return $this->timeZone;
+        $timeZone = $this->createTimeZone();
+        $this->assertInstanceOf(\Serializable::class, $timeZone);
+
+        $serialized = \serialize($timeZone);
+        $this->assertTrue(
+            $this->createTimeZone()
+                ->equals(
+                    \unserialize($serialized)
+                )
+        );
     }
 
-    private function getTimeZoneId(): TimeZoneId
+    private function createTimeZone(string $rawId = self::ID): TimeZone
     {
-        return $this->timeZoneId;
+        return TimeZone::ofId($this->createTimeZoneId($rawId));
+    }
+
+    private function createTimeZoneId(string $rawId = self::ID): TimeZoneId
+    {
+        return new TimeZoneId($rawId);
     }
 }

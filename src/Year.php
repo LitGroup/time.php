@@ -14,6 +14,7 @@ namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
 use LitGroup\Time\Exception\DateTimeException;
+use Serializable;
 
 /**
  * A year in the ISO-8601 calendar system, such as 2007.
@@ -22,7 +23,7 @@ use LitGroup\Time\Exception\DateTimeException;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class Year implements Equatable
+final class Year implements Equatable, Serializable
 {
     const MIN_VALUE = 1;
     const MAX_VALUE = 9999;
@@ -74,17 +75,34 @@ final class Year implements Equatable
         return $this->compare($another) <= 0;
     }
 
-    private function __construct(int $value)
+    private function __construct(int $rawValue)
     {
-        if ($value < self::MIN_VALUE || $value > self::MAX_VALUE) {
+        $this->init($rawValue);
+    }
+
+    public function serialize()
+    {
+        return serialize($this->rawValue);
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->init(unserialize($serialized));
+    }
+
+    private function init(int $rawValue)
+    {
+        assert($this->rawValue === null);
+
+        if ($rawValue < self::MIN_VALUE || $rawValue > self::MAX_VALUE) {
             throw new DateTimeException(sprintf(
                 'Year cannot be less than %d or greater than %d, but %d given.',
                 self::MIN_VALUE,
                 self::MAX_VALUE,
-                $value
+                $rawValue
             ));
         }
 
-        $this->rawValue = $value;
+        $this->rawValue = $rawValue;
     }
 }

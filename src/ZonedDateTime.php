@@ -15,6 +15,7 @@ namespace LitGroup\Time;
 use DateTimeImmutable as NativeDateTime;
 use DateTimeZone as NativeTimeZone;
 use LitGroup\Equatable\Equatable;
+use Serializable;
 
 /**
  * A date-time with a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30+03:00 Europe/Moscow.
@@ -25,13 +26,8 @@ use LitGroup\Equatable\Equatable;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class ZonedDateTime implements DateTime, Equatable
+final class ZonedDateTime implements DateTime, Equatable, Serializable
 {
-    /**
-     * @var NativeDateTime
-     */
-    private $nativeDateTime;
-
     /**
      * @var TimeZone
      */
@@ -46,6 +42,11 @@ final class ZonedDateTime implements DateTime, Equatable
      * @var Time
      */
     private $time;
+
+    /**
+     * @var NativeDateTime|null
+     */
+    private $nativeDateTimeCache;
 
 
     public static function of(
@@ -147,28 +148,56 @@ final class ZonedDateTime implements DateTime, Equatable
         return $this->compare($another) <= 0;
     }
 
+    public function serialize()
+    {
+        return \serialize([
+            $this->getTimeZone(),
+            $this->getDate(),
+            $this->getTime(),
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list ($tz, $date, $time) = \unserialize($serialized);
+        $this->init($tz, $date, $time);
+    }
+
     private function __construct(TimeZone $timeZone, Date $date, Time $time)
     {
-        $this->timeZone = $timeZone;
-        $this->date = $date;
-        $this->time = $time;
-        $this->nativeDateTime = NativeDateTime::createFromFormat(
-            'Y/m/d H:i:s',
-            sprintf(
-                "%'04d/%'02d/%'02d %'02d:%'02d:%'02d",
-                $date->getYear()->getRawValue(),
-                $date->getMonth()->getRawValue(),
-                $date->getDayOfMonth(),
-                $time->getHour(),
-                $time->getMinute(),
-                $time->getSecond()
-            ),
-            new NativeTimeZone($timeZone->getId()->getRawValue())
-        );
+        $this->init($timeZone, $date, $time);
     }
 
     private function getNativeDateTime(): NativeDateTime
     {
-        return $this->nativeDateTime;
+        if ($this->nativeDateTimeCache === null) {
+            $date = $this->getDate();
+            $time = $this->getTime();
+            $timeZone = $this->getTimeZone();
+            $this->nativeDateTimeCache = NativeDateTime::createFromFormat(
+                'Y/m/d H:i:s',
+                sprintf(
+                    "%'04d/%'02d/%'02d %'02d:%'02d:%'02d",
+                    $date->getYear()->getRawValue(),
+                    $date->getMonth()->getRawValue(),
+                    $date->getDayOfMonth(),
+                    $time->getHour(),
+                    $time->getMinute(),
+                    $time->getSecond()
+                ),
+                new NativeTimeZone($timeZone->getId()->getRawValue())
+            );
+        }
+
+        return $this->nativeDateTimeCache;
+    }
+
+    private function init(TimeZone $timeZone, Date $date, Time $time)
+    {
+        assert($this->timeZone === null && $this->date === null && $this->time === null);
+
+        $this->timeZone = $timeZone;
+        $this->date = $date;
+        $this->time = $time;
     }
 }
