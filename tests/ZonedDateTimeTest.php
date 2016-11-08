@@ -51,40 +51,12 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     const OFFSET_DST = false;
 
     /**
-     * @var ZonedDateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var TimeZone
-     */
-    private $timeZone;
-
-    /**
-     * @var Date
-     */
-    private $date;
-
-    /**
-     * @var Time
-     */
-    private $time;
-
-    protected function setUp()
-    {
-        $this->timeZone = TimeZone::ofId(new TimeZoneId(self::TIMEZONE));
-        $this->date = new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
-        $this->time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
-        $this->dateTime = ZonedDateTime::ofDateAndTime($this->timeZone, $this->date, $this->time);
-    }
-
-    /**
      * @test
      * @testdox It is a subtype of DateTime
      */
     public function itIsASubtypeOfDateTime()
     {
-        $this->assertInstanceOf(DateTime::class, $this->getDateTime());
+        $this->assertInstanceOf(DateTime::class, $this->createDateTime());
     }
 
     /**
@@ -92,8 +64,8 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasATimeZone()
     {
-        $dateTime = $this->getDateTime();
-        $expectedTimeZone = $this->getTimeZone();
+        $dateTime = $this->createDateTime();
+        $expectedTimeZone = $this->createTimeZone();
         $this->assertTrue($expectedTimeZone->equals($dateTime->getTimeZone()));
     }
 
@@ -102,8 +74,8 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasADate()
     {
-        $dateTime = $this->getDateTime();
-        $expectedDate = $this->getDate();
+        $dateTime = $this->createDateTime();
+        $expectedDate = $this->createDate();
 
         $this->assertTrue($expectedDate->equals($dateTime->getDate()));
     }
@@ -113,7 +85,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasATime()
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $expectedTime = $this->getTime();
 
         $this->assertTrue($expectedTime->equals($dateTime->getTime()));
@@ -124,7 +96,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasATimestampInSecondsSinceEpoch()
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $this->assertSame(self::TIMESTAMP, $dateTime->getSecondsSinceEpoch());
     }
 
@@ -133,7 +105,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasAnOffset()
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $expectedZone = new Offset(self::OFFSET_ABBR, self::OFFSET_TOTAL_SECONDS, self::OFFSET_DST);
 
         $this->assertTrue($expectedZone->equals($dateTime->getOffset()));
@@ -145,7 +117,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $this->assertInstanceOf(Equatable::class, $dateTime);
         $this->assertSame($equal, $dateTime->equals($another));
     }
@@ -243,17 +215,17 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
     public function itHasAFactoryMethodWithInitializationByScalarValues()
     {
         $this->assertTrue(
-            ZonedDateTime::of($this->getTimeZone(), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)
+            ZonedDateTime::of($this->createTimeZone(), self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)
                 ->equals(
-                    $this->getDateTime()
+                    $this->createDateTime()
                 )
         );
 
         $this->assertTrue(
-            ZonedDateTime::of($this->getTimeZone(), self::YEAR)
+            ZonedDateTime::of($this->createTimeZone(), self::YEAR)
                 ->equals(
                     ZonedDateTime::of(
-                        $this->getTimeZone(),
+                        $this->createTimeZone(),
                         self::YEAR,
                         self::DEFAULT_MONTH,
                         self::DEFAULT_DAY,
@@ -327,7 +299,7 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsComparable(int $result, ZonedDateTime $another)
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $this->assertSame($result, $dateTime->compare($another));
         $this->assertSame($result > 0, $dateTime->greaterThan($another));
         $this->assertSame($result >= 0, $dateTime->greaterThanOrEqual($another));
@@ -367,23 +339,27 @@ class ZonedDateTimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function getDateTime(): ZonedDateTime
+    private function createDateTime(TimeZone $tz = null, Date $date = null, Time $time = null): ZonedDateTime
     {
-        return $this->dateTime;
+        return ZonedDateTime::ofDateAndTime(
+            $tz ?? $this->createTimeZone(),
+            $date ?? $this->createDate(),
+            $time ?? $this->getTime()
+        );
     }
 
-    private function getTimeZone(): TimeZone
+    private function createTimeZone(string $rawId = self::TIMEZONE): TimeZone
     {
-        return $this->timeZone;
+        return TimeZone::of($rawId);
     }
 
-    private function getDate(): Date
+    private function createDate(int $year = self::YEAR, int $month = self::MONTH, int $day = self::DAY): Date
     {
-        return $this->date;
+        return Date::of($year, $month, $day);
     }
 
-    private function getTime(): Time
+    private function getTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
     {
-        return $this->time;
+        return Time::of($hour, $minute, $second);
     }
 }

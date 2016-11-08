@@ -28,11 +28,6 @@ use LitGroup\Equatable\Equatable;
 final class ZonedDateTime implements DateTime, Equatable
 {
     /**
-     * @var NativeDateTime
-     */
-    private $nativeDateTime;
-
-    /**
      * @var TimeZone
      */
     private $timeZone;
@@ -46,6 +41,11 @@ final class ZonedDateTime implements DateTime, Equatable
      * @var Time
      */
     private $time;
+
+    /**
+     * @var NativeDateTime|null
+     */
+    private $nativeDateTimeCache;
 
 
     public static function of(
@@ -152,23 +152,29 @@ final class ZonedDateTime implements DateTime, Equatable
         $this->timeZone = $timeZone;
         $this->date = $date;
         $this->time = $time;
-        $this->nativeDateTime = NativeDateTime::createFromFormat(
-            'Y/m/d H:i:s',
-            sprintf(
-                "%'04d/%'02d/%'02d %'02d:%'02d:%'02d",
-                $date->getYear()->getRawValue(),
-                $date->getMonth()->getRawValue(),
-                $date->getDayOfMonth(),
-                $time->getHour(),
-                $time->getMinute(),
-                $time->getSecond()
-            ),
-            new NativeTimeZone($timeZone->getId()->getRawValue())
-        );
     }
 
     private function getNativeDateTime(): NativeDateTime
     {
-        return $this->nativeDateTime;
+        if ($this->nativeDateTimeCache === null) {
+            $date = $this->getDate();
+            $time = $this->getTime();
+            $timeZone = $this->getTimeZone();
+            $this->nativeDateTimeCache = NativeDateTime::createFromFormat(
+                'Y/m/d H:i:s',
+                sprintf(
+                    "%'04d/%'02d/%'02d %'02d:%'02d:%'02d",
+                    $date->getYear()->getRawValue(),
+                    $date->getMonth()->getRawValue(),
+                    $date->getDayOfMonth(),
+                    $time->getHour(),
+                    $time->getMinute(),
+                    $time->getSecond()
+                ),
+                new NativeTimeZone($timeZone->getId()->getRawValue())
+            );
+        }
+
+        return $this->nativeDateTimeCache;
     }
 }

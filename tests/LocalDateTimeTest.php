@@ -37,34 +37,12 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_SECOND = 0;
 
     /**
-     * @var LocalDateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var Date
-     */
-    private $date;
-
-    /**
-     * @var Time
-     */
-    private $time;
-
-    protected function setUp()
-    {
-        $this->date = new Date(Year::of(self::YEAR), Month::getValueOf(self::MONTH), self::DAY);
-        $this->time = Time::of(self::HOUR, self::MINUTE, self::SECOND);
-        $this->dateTime = new LocalDateTime($this->date, $this->time);
-    }
-
-    /**
      * @test
      * @testdox It is a subtype of DateTime
      */
     public function itIsASubtypeOfDateTime()
     {
-        $this->assertInstanceOf(DateTime::class, $this->getDateTime());
+        $this->assertInstanceOf(DateTime::class, $this->createDateTime());
     }
 
     /**
@@ -74,7 +52,7 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
             LocalDateTime::of(self::YEAR, self::MONTH, self::DAY, self::HOUR, self::MINUTE, self::SECOND)->equals(
-                $this->getDateTime()
+                $this->createDateTime()
             )
         );
 
@@ -93,8 +71,8 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasADate()
     {
-        $dateTime = $this->getDateTime();
-        $this->assertTrue($dateTime->getDate()->equals($this->getDate()));
+        $dateTime = $this->createDateTime();
+        $this->assertTrue($dateTime->getDate()->equals($this->createDate()));
     }
 
     /**
@@ -102,8 +80,8 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasATime()
     {
-        $dateTime = $this->getDateTime();
-        $this->assertTrue($dateTime->getTime()->equals($this->getTime()));
+        $dateTime = $this->createDateTime();
+        $this->assertTrue($dateTime->getTime()->equals($this->createTime()));
     }
 
     /**
@@ -112,8 +90,8 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
     {
-        $this->assertInstanceOf(Equatable::class, $this->getDateTime());
-        $this->assertSame($equal, $this->getDateTime()->equals($another));
+        $this->assertInstanceOf(Equatable::class, $this->createDateTime());
+        $this->assertSame($equal, $this->createDateTime()->equals($another));
     }
 
     public function getEqualityExamples(): array
@@ -169,7 +147,7 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsComparable(int $result, LocalDateTime $another)
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $this->assertSame($result, $dateTime->compare($another));
         $this->assertSame($result > 0, $dateTime->greaterThan($another));
         $this->assertSame($result >= 0, $dateTime->greaterThanOrEqual($another));
@@ -201,25 +179,28 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsSerializable()
     {
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->createDateTime();
         $this->assertInstanceOf(\Serializable::class, $dateTime);
 
         $serialized = \serialize($dateTime);
-        $this->assertTrue($dateTime->equals(\unserialize($serialized)));
+        $this->assertTrue(
+            $this->createDateTime()
+                ->equals(\unserialize($serialized))
+        );
     }
 
-    private function getDateTime(): LocalDateTime
+    private function createDateTime(Date $date = null, Time $time = null): LocalDateTime
     {
-        return $this->dateTime;
+        return new LocalDateTime($date ?? $this->createDate(), $time ?? $this->createTime());
     }
 
-    private function getDate()
+    private function createDate(int $year = self::YEAR, int $mont = self::MONTH, int $day = self::DAY): Date
     {
-        return $this->date;
+        return Date::of($year, $mont, $day);
     }
 
-    private function getTime(): Time
+    private function createTime(int $hour = self::HOUR, int $minute = self::MINUTE, int $second = self::SECOND): Time
     {
-        return $this->time;
+        return Time::of($hour, $minute, $second);
     }
 }

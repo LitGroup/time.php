@@ -27,33 +27,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_DAY_OF_MONTH = 1;
 
     /**
-     * @var Date
-     */
-    private $date;
-
-    /**
-     * @var Year
-     */
-    private $year;
-
-    /**
-     * @var Month
-     */
-    private $month;
-
-    protected function setUp()
-    {
-        $this->year = Year::of(self::YEAR);
-        $this->month = Month::getValueOf(8);
-        $this->date = new Date($this->year, $this->month, self::DAY_OF_MONTH);
-    }
-
-    /**
      * @test
      */
     public function itHasAYear()
     {
-        $this->assertSame($this->getYear(), $this->getDate()->getYear());
+        $date = $this->createDate();
+        $this->assertTrue($this->createYear()->equals($date->getYear()));
     }
 
     /**
@@ -61,7 +40,8 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasAMonth()
     {
-        $this->assertSame($this->getMonth(), $this->getDate()->getMonth());
+        $date = $this->createDate();
+        $this->assertTrue($this->createMonth()->equals($date->getMonth()));
     }
 
     /**
@@ -69,7 +49,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itHasADayOfMonth()
     {
-        $this->assertSame(self::DAY_OF_MONTH, $this->getDate()->getDayOfMonth());
+        $this->assertSame(self::DAY_OF_MONTH, $this->createDate()->getDayOfMonth());
     }
 
     /**
@@ -79,7 +59,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itThrowsAnExceptionWhenDayOfMonthIsInvalidDuringInstantiation(Year $year, Month $month, int $day)
     {
-        new Date($year, $month, $day);
+        $this->createDate($year, $month, $day);
     }
 
     public function getInvalidDateExamples(): array
@@ -98,8 +78,8 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsEqualToAnotherOne(bool $equal, Equatable $another)
     {
-        $this->assertInstanceOf(Equatable::class, $this->getDate());
-        $this->assertSame($equal, $this->getDate()->equals($another));
+        $this->assertInstanceOf(Equatable::class, $this->createDate());
+        $this->assertSame($equal, $this->createDate()->equals($another));
     }
 
     public function getEqualityExamples(): array
@@ -123,7 +103,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
             Date::of(self::YEAR, self::MONTH, self::DAY_OF_MONTH)->equals(
-                $this->getDate()
+                $this->createDate()
             )
         );
         $this->assertTrue(
@@ -160,7 +140,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsComparable(int $result, Date $another)
     {
-        $date = $this->getDate();
+        $date = $this->createDate();
         $this->assertSame($result, $date->compare($another));
         $this->assertSame($result > 0, $date->greaterThan($another));
         $this->assertSame($result >= 0, $date->greaterThanOrEqual($another));
@@ -186,25 +166,32 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function itIsSerializable()
     {
-        $date = $this->getDate();
+        $date = $this->createDate();
         $this->assertInstanceOf(\Serializable::class, $date);
 
         $serialized = serialize($date);
-        $this->assertTrue($date->equals(unserialize($serialized)));
+        $this->assertTrue(
+            $this->createDate()
+                ->equals(unserialize($serialized))
+        );
     }
 
-    private function getDate(): Date
+    private function createDate(Year $year = null, Month $month = null, int $dayOfMonth = self::DAY_OF_MONTH): Date
     {
-        return $this->date;
+        return new Date(
+            $year ?? $this->createYear(),
+            $month ?? $this->createMonth(),
+            $dayOfMonth
+        );
     }
 
-    private function getYear(): Year
+    private function createYear(int $rawValue = self::YEAR): Year
     {
-        return $this->year;
+        return Year::of($rawValue);
     }
 
-    private function getMonth(): Month
+    private function createMonth(int $rawValue = self::MONTH): Month
     {
-        return $this->month;
+        return Month::getValueOf($rawValue);
     }
 }
