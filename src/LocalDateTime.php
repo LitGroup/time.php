@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
+use Serializable;
 
 /**
  * A date-time without a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30.
@@ -26,7 +27,7 @@ use LitGroup\Equatable\Equatable;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class LocalDateTime implements DateTime, Equatable
+final class LocalDateTime implements DateTime, Equatable, Serializable
 {
     /**
      * @var Date
@@ -45,8 +46,7 @@ final class LocalDateTime implements DateTime, Equatable
 
     public function __construct(Date $date, Time $time)
     {
-        $this->date = $date;
-        $this->time = $time;
+        $this->init($date, $time);
     }
 
     public function getDate(): Date
@@ -94,5 +94,22 @@ final class LocalDateTime implements DateTime, Equatable
     public function lessThanOrEqual(LocalDateTime $another): bool
     {
         return $this->compare($another) <= 0;
+    }
+
+    public function serialize()
+    {
+        return \serialize([$this->getDate(), $this->getTime()]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list ($date, $time) = \unserialize($serialized);
+        $this->init($date, $time);
+    }
+
+    private function init(Date $date, Time $time)
+    {
+        $this->date = $date;
+        $this->time = $time;
     }
 }

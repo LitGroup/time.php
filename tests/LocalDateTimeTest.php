@@ -196,6 +196,18 @@ class LocalDateTimeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $dateTime = $this->getDateTime();
+        $this->assertInstanceOf(\Serializable::class, $dateTime);
+
+        $serialized = \serialize($dateTime);
+        $this->assertTrue($dateTime->equals(\unserialize($serialized)));
+    }
+
     private function getDateTime(): LocalDateTime
     {
         return $this->dateTime;
