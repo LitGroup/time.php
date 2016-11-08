@@ -37,11 +37,5 @@
             "/.travis.yml",
             ".gitignore"
         ]
-    },
-    "scripts": {
-        "test": [
-            "tool/phpspec run --no-interaction --config=phpspec.yml.dist",
-            "tool/phpunit"
-        ]
     }
 }
