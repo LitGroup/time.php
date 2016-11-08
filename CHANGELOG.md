@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - `greaterThanOrEqual()`
     - `lessThan()`
     - `lessThanOrEqual()`
+- Value objects were made serializable: `Year`, `Date`, `Time`, `LocalDateTime`, `ZonedDateTime`, `TimeZone`,
+  `TimeZoneId`, `Offset`.
 
 ## v0.1.1 - 2016-10-10
 ### Added
