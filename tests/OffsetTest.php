@@ -121,6 +121,18 @@ class OffsetTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function itIsSerializable()
+    {
+        $offset = $this->createOffset();
+        $this->assertInstanceOf(\Serializable::class, $offset);
+
+        $serialized = \serialize($offset);
+        $this->assertTrue($this->createOffset()->equals(\unserialize($serialized)));
+    }
+
     private function createOffset(string $abbr = self::ABBREVIATION, int $offset = self::TOTAL_SECONDS, bool $dst = false): Offset
     {
         return new Offset($abbr, $offset, $dst);

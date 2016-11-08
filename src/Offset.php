@@ -13,13 +13,14 @@ declare(strict_types = 1);
 namespace LitGroup\Time;
 
 use LitGroup\Equatable\Equatable;
+use Serializable;
 
 /**
  * Offset from UTC.
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-final class Offset implements Equatable
+final class Offset implements Equatable, Serializable
 {
     /**
      * @var string
@@ -38,12 +39,7 @@ final class Offset implements Equatable
 
     public function __construct(string $abbreviation, int $totalSeconds, bool $dst)
     {
-        if (strlen(trim($abbreviation)) === 0) {
-            throw new \InvalidArgumentException('Abbreviation of time zone cannot be empty.');
-        }
-        $this->abbreviation = $abbreviation;
-        $this->totalSeconds = $totalSeconds;
-        $this->dst = $dst;
+        $this->init($abbreviation, $totalSeconds, $dst);
     }
 
     /**
@@ -95,5 +91,31 @@ final class Offset implements Equatable
             $another->getTotalSeconds() === $this->getTotalSeconds() &&
             $another->getAbbreviation() === $this->getAbbreviation() &&
             $another->isDst() === $this->isDst();
+    }
+
+    public function serialize()
+    {
+        return \serialize([$this->getAbbreviation(), $this->getTotalSeconds(), $this->isDst()]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list ($abbr, $totalSeconds, $dst) = \unserialize($serialized);
+        $this->init($abbr, $totalSeconds, $dst);
+    }
+
+    private function init(string $abbreviation, int $totalSeconds, bool $dst)
+    {
+        assert($this->abbreviation === null);
+        assert($this->totalSeconds === null);
+        assert($this->dst === null);
+
+        if (strlen(trim($abbreviation)) === 0) {
+            throw new \InvalidArgumentException('Abbreviation of time zone cannot be empty.');
+        }
+
+        $this->abbreviation = $abbreviation;
+        $this->totalSeconds = $totalSeconds;
+        $this->dst = $dst;
     }
 }
