@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## v0.2.0 - 2016-11-08
 ### Added
 - `Year`, `Month`, `Date`, `Time`, `LocalDateTime` and `ZonedDateTime` are comparable from now on.
   Next methods were added to these types:
