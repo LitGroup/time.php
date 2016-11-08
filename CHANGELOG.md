@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 ### Added
 - `Year`, `Month`, `Date`, `Time`, `LocalDateTime` and `ZonedDateTime` are comparable from now on.
-  Next methods had added to these types:
+  Next methods were added to these types:
     - `compare()`
     - `greaterThan()`
     - `greaterThanOrEqual()`
