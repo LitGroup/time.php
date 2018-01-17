@@ -1,6 +1,6 @@
 # Date and Time library for PHP 7+
 
-> This is an experimental implementation. Do not use it in production.
+🚫 **(This project is no longer maintained.)**
 
 [![Version](https://img.shields.io/packagist/v/litgroup/time.svg)](https://packagist.org/packages/litgroup/time)
 [![Dev Version](https://img.shields.io/packagist/vpre/litgroup/time.svg)](https://packagist.org/packages/litgroup/time)
